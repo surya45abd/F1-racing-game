@@ -1,24 +1,42 @@
 {
   "expo": {
-    "name": "lights-out-gp-app",
-    "slug": "lights-out-gp-app",
+    "name": "Lights Out GP",
+    "slug": "lights-out-gp",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#07090d",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
+      },
+      "package": "com.lightsoutgp.game",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "backgroundColor": "#07090d",
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#07090d",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 220,
+          "resizeMode": "contain",
+          "dark": {
+            "image": "./assets/splash-icon.png",
+            "backgroundColor": "#07090d"
+          }
+        }
+      ]
+    ]
   }
 }
