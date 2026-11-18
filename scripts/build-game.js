@@ -13,6 +13,19 @@ const THREE_TAG = '<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build
 const threeSrc = fs.readFileSync(path.resolve(__dirname, '../node_modules/three/build/three.min.js'), 'utf8');
 if (!body.includes(THREE_TAG)) throw new Error('three.js script tag not found in the game file');
 body = body.replace(THREE_TAG, () => '<script>' + threeSrc + '</script>');
+// the Supabase client and the cloud module (sign-in, profile, saves) are inlined the same way
+const SB_TAG = '<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>';
+const CLOUD_TAG = '<script src="cloud.js"></script>';
+if (!body.includes(SB_TAG) || !body.includes(CLOUD_TAG)) throw new Error('Supabase or cloud.js script tag not found in the game file');
+const sbSrc = fs.readFileSync(path.resolve(__dirname, '../node_modules/@supabase/supabase-js/dist/umd/supabase.js'), 'utf8');
+const cloudSrc = fs.readFileSync(path.resolve(__dirname, '../games/cloud.js'), 'utf8');
+const inline = (js) => '<script>' + js.replace(/<\/script/gi, '<\\/script') + '</script>';
+body = body.replace(SB_TAG, () => inline(sbSrc)).replace(CLOUD_TAG, () => inline(cloudSrc));
+// the phone app loads the game from inside the app, so it needs the hosted race server address (game.config.json or RACE_SERVER_URL)
+let raceServer = process.env.RACE_SERVER_URL || '';
+try { raceServer = raceServer || JSON.parse(fs.readFileSync(path.resolve(__dirname, '../game.config.json'), 'utf8')).raceServer || ''; } catch { /* no config: online play is off in the app */ }
+if (raceServer && !/^wss:\/\/[\w.-]+(:\d+)?\/?$/.test(raceServer)) throw new Error('raceServer must look like wss://your-service.onrender.com');
+if (raceServer) body = '<script>window.LOGP_RACE_SERVER=' + JSON.stringify(raceServer.replace(/\/$/, '')) + ';</script>' + body;
 const head = [
   '<!doctype html><html lang="en"><head>',
   '<meta charset="utf-8">',

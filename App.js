@@ -3,6 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useKeepAwake } from 'expo-keep-awake';
 import { Accelerometer } from 'expo-sensors';
 import * as Haptics from 'expo-haptics';
+import * as WebBrowser from 'expo-web-browser';
+import * as Linking from 'expo-linking';
 import { StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import gameHtml from './game/gameHtml';
@@ -31,12 +33,32 @@ export default function App() {
   };
   useEffect(() => stopTilt, []);
 
-  // messages from the game: { t: 'buzz', s: 'light' | 'medium' | 'heavy' } and { t: 'tilt', on }
+  // Google does not allow sign-in inside an embedded web view, so sign-in runs in the system browser
+  // and the session tokens come back to the game through the lightsoutgp://auth link.
+  const signIn = async (gameUrl) => {
+    // the return link is lightsoutgp://auth in the installed app, and exp://<pc>:8081/--/auth when testing in Expo Go
+    const redirect = Linking.createURL('auth');
+    const url = gameUrl.split('?')[0] + '?provider=google&redirect_to=' + encodeURIComponent(redirect);
+    const fail = (m) => web.current?.injectJavaScript(`window.__logpSignInFailed&&window.__logpSignInFailed(${JSON.stringify(m)});true;`);
+    try {
+      const res = await WebBrowser.openAuthSessionAsync(url, redirect);
+      if (res.type !== 'success' || !res.url) { fail('Sign-in was cancelled.'); return; }
+      const params = new URLSearchParams((res.url.split('#')[1] || res.url.split('?')[1] || ''));
+      const at = params.get('access_token'), rt = params.get('refresh_token');
+      if (!at || !rt) { fail(params.get('error_description') || 'Sign-in did not complete.'); return; }
+      web.current?.injectJavaScript(`window.__logpSession&&window.__logpSession(${JSON.stringify(at)},${JSON.stringify(rt)});true;`);
+    } catch {
+      fail('Could not open the sign-in page.');
+    }
+  };
+
+  // messages from the game: { t: 'buzz', s }, { t: 'tilt', on }, { t: 'signin', url, redirect }
   const onMessage = (event) => {
     let msg;
     try { msg = JSON.parse(event.nativeEvent.data); } catch { return; }
     if (msg.t === 'buzz') Haptics.impactAsync(HAPTIC[msg.s] || HAPTIC.light).catch(() => {});
     else if (msg.t === 'tilt') (msg.on ? startTilt : stopTilt)();
+    else if (msg.t === 'signin' && typeof msg.url === 'string' && msg.url.startsWith('https://kuompdrogzkazycrohcr.supabase.co/')) signIn(msg.url);
   };
 
   return (

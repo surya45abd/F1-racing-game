@@ -36,7 +36,9 @@
             "backgroundColor": "#07090d"
           }
         }
-      ]
-    ]
+      ],
+      "expo-web-browser"
+    ],
+    "scheme": "lightsoutgp"
   }
 }
