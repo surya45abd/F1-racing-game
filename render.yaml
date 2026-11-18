@@ -1,0 +1,19 @@
+# Render blueprint for Lights Out GP: one web service that serves the game page and runs live races (WebSocket) on the same address.
+# Deploy: Render dashboard → New → Blueprint → pick this repository. Then set SUPABASE_SECRET_KEY in the service's Environment tab.
+services:
+  - type: web
+    name: lights-out-gp
+    runtime: node
+    plan: free            # sleeps after ~15 min idle; switch to "starter" to keep it always on
+    region: singapore
+    buildCommand: npm ci --prefix server
+    startCommand: node server/index.js
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: SUPABASE_URL
+        value: https://kuompdrogzkazycrohcr.supabase.co
+      - key: SUPABASE_SECRET_KEY
+        sync: false       # secret: entered in the Render dashboard, never stored in git

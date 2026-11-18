@@ -1,4 +1,5 @@
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Lights Out GP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -119,6 +120,234 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--night);border-color:var(--ink)}
 .seg.teams button{flex:1 1 calc(25% - 6px);min-width:96px;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 8px;white-space:nowrap}
 .seg.teams .chip{width:10px;height:10px;border-radius:2px;flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.profile{display:flex;align-items:center;gap:12px;min-height:60px;padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+.profile .av{width:40px;height:40px;border-radius:50%;flex:none;background:var(--panel-2);object-fit:cover;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:18px}
+.profile .who{flex:1;min-width:0;display:grid;gap:3px}
+.profile .nm{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.profile .st{display:flex;flex-wrap:wrap;gap:6px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted)}
+.profile .st b{color:var(--ink);font-weight:700}
+.profile .st .gold b{color:#ffcf4a}
+.profile .msg{font-size:13px;color:var(--muted)}
+.profile .msg.err{color:#ff8a8a}
+.profile .sync{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--muted)}
+.profile .sync.err{color:#ff8a8a}
+.pbtn{height:36px;padding:0 14px;border-radius:6px;border:1px solid var(--line);background:var(--panel-2);font-weight:600;font-size:13px;white-space:nowrap;flex:none}
+.pbtn.google{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#1f1f1f;border-color:#fff}
+.pbtn.google svg{width:18px;height:18px}
+.pbtn:disabled{opacity:.6;cursor:default}
+.spin{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--ink);animation:spin .8s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* progression: XP bars, results XP card, level-up, levels screen */
+.xpbar{height:6px;border-radius:3px;background:var(--panel-2);overflow:hidden;border:1px solid var(--line)}
+.xpbar b{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb21e,#ffd86b);border-radius:inherit;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.xpbar.big{height:10px;border-radius:5px}
+.profile .xprow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.06em}
+.profile .ttl{color:#ffcf4a;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.profile .acts{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:none}
+.profile .acts .pbtn{height:30px;padding:0 10px;font-size:12px}
+.xp-card{display:grid;gap:10px;padding:14px 16px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+.xp-card .xp-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.xp-card .xp-big{font-family:var(--display);font-weight:800;font-style:italic;font-size:40px;line-height:1;color:#ffcf4a}
+.xp-card .xp-lv{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.xp-card ul{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:14px}
+.xp-card li{display:flex;justify-content:space-between;gap:12px;color:var(--muted)}
+.xp-card li b{color:var(--ink);font-family:var(--mono);font-size:13px}
+.xp-card .msg{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.xp-card .msg.err{color:#ff8a8a}
+.levelup{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:rgba(5,7,10,.82);overflow:hidden;padding:16px}
+.lu-rays{position:absolute;width:160vmax;height:160vmax;background:repeating-conic-gradient(from 0deg,rgba(255,207,74,.13) 0 6deg,transparent 6deg 18deg);animation:lu-spin 18s linear infinite;mask:radial-gradient(circle,#000 0,transparent 55%);-webkit-mask:radial-gradient(circle,#000 0,transparent 55%)}
+.lu-card{position:relative;display:grid;gap:12px;justify-items:center;text-align:center;width:min(380px,100%);padding:28px 24px;border-radius:12px;background:#0b0e14;border:1px solid rgba(255,207,74,.45);box-shadow:0 0 60px rgba(255,178,30,.25);animation:lu-pop .7s cubic-bezier(.2,1.4,.4,1) both}
+.lu-level{font-family:var(--display);font-weight:900;font-style:italic;font-size:120px;line-height:.85;color:#ffcf4a;text-shadow:0 0 30px rgba(255,178,30,.55)}
+.lu-title{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink)}
+.lu-rewards{list-style:none;margin:4px 0 6px;padding:0;display:grid;gap:6px;width:100%}
+.lu-rewards li{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:6px;background:var(--panel-2);font-size:14px}
+.lu-rewards li b{color:#ffcf4a}
+.lu-card .go{width:100%}
+@keyframes lu-spin{to{transform:rotate(360deg)}}
+@keyframes lu-pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.lu-rays,.lu-card{animation:none}.xpbar b{transition:none}}
+.overlay.center .card.prog-card{width:min(880px,100%)}
+.prog-head{display:flex;align-items:end;justify-content:space-between;gap:16px}
+.prog-note{margin:-12px 0 0;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
+.prog-body{display:grid;gap:18px}
+.prog-body h3{margin:0;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.miles{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.mile{padding:10px 12px;border-radius:8px;border:1px solid rgba(255,207,74,.35);background:rgba(255,178,30,.06);display:grid;gap:4px}
+.mile b{font-family:var(--display);font-size:20px;font-weight:800}
+.mile span{font-size:13px;color:var(--muted)}
+.lvgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.lv{position:relative;padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--panel-2);display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.lv .n{font-family:var(--display);font-weight:800;font-size:20px;color:var(--ink);line-height:1}
+.lv .g{color:#ffcf4a;font-family:var(--mono);font-size:11px}
+.lv .u{color:var(--ink);font-weight:600}
+.lv .soon{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:0 4px;justify-self:start}
+.lv.done{opacity:.55}
+.lv.done .n::after{content:" ✓";color:var(--green);font-size:14px}
+.lv.cur{border-color:#ffcf4a;background:rgba(255,178,30,.10);opacity:1}
+.lv.big{border-color:rgba(180,108,255,.6)}
+.hist{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.hist ul{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px;font-size:13px}
+.hist li{display:flex;justify-content:space-between;gap:10px;padding:6px 10px;border-radius:5px;background:var(--panel-2)}
+.hist li span:last-child{color:var(--muted);font-family:var(--mono);font-size:12px}
+/* track cards */
+.tracks{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.tcard{position:relative;display:grid;gap:4px;text-align:left;padding:8px 10px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2);min-width:0}
+.tcard[aria-pressed="true"]{border-color:var(--ink);background:rgba(255,255,255,.10)}
+.tcard canvas{width:100%;height:78px;display:block}
+.tcard .tn{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tcard .tk{font-size:11px;color:var(--muted);line-height:1.3}
+.tcard .tm{display:flex;justify-content:space-between;gap:6px;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em}
+.tcard .dots{letter-spacing:1px;color:var(--amber)}
+.tcard .ts{font-family:var(--mono);font-size:10px;color:var(--green)}
+.tcard.locked{cursor:not-allowed;opacity:.7}
+.tcard .lockb{position:absolute;top:8px;right:8px;padding:2px 6px;border-radius:4px;background:rgba(0,0,0,.6);border:1px solid var(--line);font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--ink)}
+.lock-note{color:var(--amber);letter-spacing:.08em}
+.seg button:disabled{opacity:.35;cursor:not-allowed}
+.lu-track{width:220px;height:130px}
+/* wallet, achievements, tier */
+.tier-note{color:#ffcf4a;letter-spacing:.08em}
+.levelup.ach .lu-level{font-size:96px}
+.txs{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.txs li{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:8px 12px;border-radius:6px;background:var(--panel-2);font-size:14px}
+.txs .amt{font-family:var(--mono);font-weight:700;text-align:right}
+.txs .amt.plus{color:#ffcf4a}
+.txs .amt.minus{color:#ff8a8a}
+.txs .meta{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.txs .bal{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right}
+.achs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.ach{display:grid;gap:4px;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2)}
+.ach b{font-size:15px}
+.ach span{font-size:13px;color:var(--muted)}
+.ach .rw{font-family:var(--mono);font-size:11px;color:#ffcf4a}
+.ach.got{border-color:rgba(255,207,74,.5);background:rgba(255,178,30,.08)}
+.ach.got b::before{content:"★ ";color:#ffcf4a}
+.ach:not(.got){opacity:.6}
+/* garage */
+.gsum{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel-2)}
+.gsum .em{width:40px;height:40px;flex:none}
+.gsum .gt{flex:1;min-width:0;display:grid;gap:2px}
+.gsum .gt b{font-size:15px}
+.gsum .gt span{font-size:12px;color:var(--muted)}
+.gtabs{display:flex;gap:6px;border-bottom:1px solid var(--line)}
+.gtabs button{height:38px;padding:0 16px;border:0;border-bottom:2px solid transparent;background:none;font-weight:700;color:var(--muted)}
+.gtabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--signal)}
+.gar-msg{min-height:18px;font-size:14px;color:var(--muted)}
+.gar-msg.err{color:#ff8a8a}
+.gar-msg.ok{color:var(--green)}
+.gar-stats{display:grid;gap:6px;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+.gstat{display:grid;grid-template-columns:110px 1fr 120px;gap:10px;align-items:center;font-size:13px}
+.gstat .gb{position:relative;height:8px;border-radius:4px;background:var(--panel-2);overflow:hidden}
+.gstat .gb i{position:absolute;inset:0 auto 0 0;border-radius:inherit}
+.gstat .gb .now{background:var(--ink)}
+.gstat .gb .after{background:var(--green)}
+.gstat .gv{font-family:var(--mono);font-size:12px;text-align:right;white-space:nowrap}
+.gstat .gv em{font-style:normal;color:var(--green)}
+.gstat .gv em.down{color:#ff8a8a}
+.gcars,.gteams{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.gcar,.gteam{display:grid;gap:6px;align-content:start;text-align:left;padding:12px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2)}
+.gcar[aria-current="true"],.gteam[aria-current="true"]{border-color:var(--ink);background:rgba(255,255,255,.08)}
+.gcar b,.gteam b{font-size:15px}
+.gcar span,.gteam span{font-size:12px;color:var(--muted)}
+.gcar .gbtn,.gteam .gbtn{justify-self:start}
+.gteam .em{width:48px;height:48px}
+.gteam .sw{display:flex;gap:4px}.gteam .sw i{width:16px;height:6px;border-radius:2px}
+.gupg{display:grid;gap:6px}
+.gu{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2)}
+.gu b{font-size:14px}
+.gu .eff{font-size:12px;color:var(--muted)}
+.gu .pips{display:flex;gap:3px}.gu .pips i{width:14px;height:6px;border-radius:2px;background:var(--line)}.gu .pips i.on{background:#ffcf4a}
+.gbtn{height:34px;padding:0 14px;border-radius:6px;border:1px solid var(--line);background:var(--ink);color:var(--night);font-weight:700;font-size:13px;white-space:nowrap}
+.gbtn.alt{background:var(--panel-2);color:var(--ink)}
+.gbtn:disabled{background:var(--panel-2);color:var(--muted);cursor:not-allowed}
+@media (max-width:560px){.gstat{grid-template-columns:84px 1fr 96px}}
+/* championship */
+.champ-btn .lk{font-size:13px;color:var(--amber);letter-spacing:.06em;margin-left:6px}
+.ch-lock{display:grid;gap:8px;padding:14px 16px;border-radius:8px;border:1px solid rgba(255,178,30,.45);background:rgba(255,178,30,.07)}
+.ch-lock b{font-family:var(--display);font-size:24px;font-style:italic;font-weight:800}
+.ch-lock span{font-size:13px;color:var(--muted)}
+.ch-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.ch-box{display:grid;gap:8px;align-content:start;padding:12px 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2);font-size:14px}
+.ch-box ul{margin:0;padding-left:18px;display:grid;gap:4px;color:var(--muted)}
+.ch-pts{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;font-family:var(--mono);font-size:12px}
+.ch-pts span{padding:4px 6px;border-radius:4px;background:var(--panel);text-align:center}
+.ch-teams{display:flex;flex-wrap:wrap;gap:6px}
+.ch-teams button{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 10px 0 4px;border-radius:6px;border:1px solid var(--line);background:var(--panel);font-weight:600;font-size:13px}
+.ch-teams button[aria-pressed="true"]{border-color:var(--ink);background:rgba(255,255,255,.1)}
+.ch-teams .em{width:34px;height:34px}
+.rounds{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.rnd{display:grid;gap:4px;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2);font-size:13px}
+.rnd canvas{width:100%;height:70px}
+.rnd b{font-size:14px}
+.rnd span{color:var(--muted);font-size:12px}
+.rnd .st{justify-self:start;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;border-radius:3px;border:1px solid var(--line)}
+.rnd .st.open{color:var(--green);border-color:var(--green)}
+.ldr{width:100%;border-collapse:collapse;font-size:14px;min-width:0}
+.ldr td,.ldr th{padding:7px 8px;text-align:left;border-bottom:1px solid var(--line)}
+.ldr th{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.ldr td.n{font-family:var(--mono);text-align:right}
+.ldr tr.me td{background:rgba(255,255,255,.08)}
+.ldr img,.ldr .ini{width:24px;height:24px;border-radius:50%;vertical-align:middle;margin-right:8px;object-fit:cover;display:inline-grid;place-items:center;background:var(--panel-2);font-size:11px;font-weight:700}
+.levelup.champ .lu-card{border-color:rgba(255,43,56,.6);box-shadow:0 0 80px rgba(255,43,56,.35)}
+.levelup.champ .lu-rays{background:repeating-conic-gradient(from 0deg,rgba(255,43,56,.16) 0 6deg,transparent 6deg 18deg)}
+.levelup.champ .lu-level{color:#fff;text-shadow:0 0 30px rgba(255,43,56,.8)}
+/* online races */
+.ai-tag{margin-left:5px;padding:0 4px;border-radius:3px;border:1px solid var(--line);font-size:9px;letter-spacing:.08em;color:var(--muted);vertical-align:1px}
+.mp-banner{position:absolute;left:50%;top:calc(70px + env(safe-area-inset-top,0px));transform:translateX(-50%);padding:10px 16px;border-radius:8px;background:rgba(255,43,56,.92);color:#fff;font-weight:700;font-size:14px;text-align:center;max-width:calc(100% - 32px)}
+.mp-box{display:grid;gap:10px}
+.mp-box .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mp-list{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.mp-list li{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:6px;background:var(--panel);font-size:14px}
+.mp-list .em{width:22px;height:22px}
+.mp-count{font-family:var(--display);font-weight:800;font-style:italic;font-size:34px;line-height:1}
+.mp-test{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--amber)}
+/* level tasks */
+.tasks{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.tasks li{display:grid;grid-template-columns:18px 1fr auto;gap:8px;align-items:center;padding:7px 10px;border-radius:6px;background:var(--panel-2);font-size:14px}
+.tasks .tk{color:var(--muted);font-weight:700}
+.tasks .tp{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.tasks li.done .tk,.tasks li.done .tp{color:var(--green)}
+.tasks li.adv{border:1px solid rgba(46,224,127,.45)}
+.lv .lvt{font-size:11px;line-height:1.35;color:var(--muted)}
+/* multiplayer rooms */
+.rm-code{font-family:var(--mono);font-weight:700;font-size:44px;letter-spacing:.18em;line-height:1}
+.rm-code-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.rm-join{display:flex;gap:8px;flex-wrap:wrap}
+.rm-join input{flex:1;min-width:160px;height:48px;padding:0 14px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-family:var(--mono);font-size:22px;letter-spacing:.2em;text-transform:uppercase}
+.rm-tracks{display:flex;flex-wrap:wrap;gap:6px}
+.rm-tracks button{height:36px;padding:0 12px;border-radius:6px;border:1px solid var(--line);background:var(--panel);font-size:13px;font-weight:600}
+.rm-tracks button[aria-pressed="true"]{background:var(--ink);color:var(--night)}
+.rm-ai{display:flex;align-items:center;gap:10px}
+.rm-ai input{flex:1}
+.rm-host{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--amber);margin-left:auto}
+/* tutorial coach */
+.coach{position:absolute;left:50%;top:calc(64px + env(safe-area-inset-top,0px));transform:translateX(-50%);width:min(440px,calc(100% - 32px));padding:14px 16px;display:grid;gap:8px;pointer-events:auto;border-color:rgba(255,178,30,.45)}
+.coach-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.coach-step{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--amber);text-transform:uppercase}
+.coach-top button{background:none;border:0;color:var(--muted);font-size:12px;text-decoration:underline}
+.coach b{font-family:var(--display);font-size:24px;font-style:italic;font-weight:800}
+.coach p{margin:0;font-size:14px;line-height:1.45;color:var(--ink)}
+.coach-keys{display:flex;flex-wrap:wrap;gap:6px;font-size:12px;color:var(--muted)}
+.coach-keys kbd{font-family:var(--mono);font-size:12px;padding:2px 7px;border-radius:4px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink)}
+.coach-btns{display:flex;gap:8px;justify-content:flex-end}
+.coach.done{border-color:var(--green)}
+.tut-offer{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:8px;border:1px solid rgba(255,178,30,.45);background:rgba(255,178,30,.07);font-size:14px}
+.tut-offer b{display:block}
+.tut-offer span{flex:1}
+@media (max-width:760px){.coach{top:auto;bottom:calc(150px + env(safe-area-inset-bottom,0px))}}
+/* dashboard */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.tile{display:grid;gap:4px;align-content:start;text-align:left;min-height:84px;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel);transition:transform .15s,border-color .15s}
+.tile:hover{border-color:rgba(255,255,255,.35);transform:translateY(-1px)}
+.tile b{font-family:var(--display);font-weight:800;font-style:italic;font-size:22px;text-transform:uppercase;letter-spacing:.02em}
+.tile span{font-size:12px;color:var(--muted);line-height:1.35}
+.tile.big{grid-column:1/-1;min-height:96px;background:linear-gradient(120deg,rgba(255,43,56,.95),rgba(170,16,30,.95));border-color:transparent}
+.tile.big b{font-size:32px}
+.tile.big span{color:rgba(255,255,255,.85)}
+.tile .lk{color:var(--amber)}
+.dash-links{display:flex;flex-wrap:wrap;gap:6px}
+.dash-links button{height:34px;padding:0 12px;border-radius:17px;border:1px solid var(--line);background:var(--panel-2);font-size:13px;font-weight:600}
+.dash-links button:disabled{opacity:.45;cursor:not-allowed}
+@media (prefers-reduced-motion:reduce){.tile{transition:none}.tile:hover{transform:none}}
 .go{height:56px;border:0;border-radius:6px;background:var(--signal);color:#fff;font-family:var(--display);font-weight:800;font-style:italic;font-size:26px;letter-spacing:.04em;text-transform:uppercase}
 .go:hover{filter:brightness(1.1)}
 .ghost{height:56px;border:1px solid var(--line);border-radius:6px;background:var(--panel-2);font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:.04em;text-transform:uppercase;padding:0 22px}
@@ -300,6 +529,15 @@ body.no-pits .pitbox{display:none}
     <div class="tt-best">BEST <b id="ttBest">—</b></div>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="mp-banner" id="mpBanner" hidden role="alert"></div>
+  <div class="coach panel" id="coach" hidden role="status" aria-live="polite">
+    <div class="coach-top"><span class="coach-step" id="coachStep">Step 1 of 10</span><button type="button" id="coachExit">Exit tutorial</button></div>
+    <b id="coachTitle">Accelerate</b>
+    <p id="coachText"></p>
+    <div class="coach-keys" id="coachKeys"></div>
+    <div class="xpbar"><b id="coachBar"></b></div>
+    <div class="coach-btns"><button type="button" class="gbtn alt" id="coachSkip">Skip step</button><button type="button" class="gbtn" id="coachNext" hidden>Next</button></div>
+  </div>
   <div class="radio panel" id="radio" hidden aria-live="polite"><b>TEAM RADIO</b><span id="radioMsg"></span></div>
 </div>
 
@@ -310,53 +548,21 @@ body.no-pits .pitbox{display:none}
 
 <section class="overlay" id="menu">
   <div class="card">
-    <div class="eyebrow" id="menuEyebrow">Circuito Vespera · Night race</div>
+    <div class="profile" id="profile" aria-live="polite"></div>
     <div class="motif" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
     <h1 class="title">Lights <em>Out</em> GP</h1>
-    <dl class="facts">
-      <div><dt>Length</dt><dd id="fLen">—</dd></div>
-      <div><dt>Corners</dt><dd id="fTurns">—</dd></div>
-      <div><dt>Your record</dt><dd id="fRec">—</dd></div>
-    </dl>
-    <div class="opt"><span class="lbl">Circuit (quick race)</span>
-      <div class="seg" data-opt="track"><button type="button" data-v="vespera">Vespera</button><button type="button" data-v="porto">Porto Lume</button><button type="button" data-v="highland">Highland</button><button type="button" data-v="sabbia">Sabbia</button></div>
+    <div class="tut-offer" id="tutOffer" hidden><span><b>New here?</b>Learn the controls in a 3-minute guided drive.</span><button class="gbtn" type="button" id="tutOfferGo">Start tutorial</button><button class="gbtn alt" type="button" id="tutOfferNo">No thanks</button></div>
+    <div class="tiles" role="group" aria-label="Game modes">
+      <button class="tile big" type="button" id="qrOpen"><b>Quick Race</b><span>Pick a circuit and race the AI. Earns XP, gold and task progress.</span></button>
+      <button class="tile" type="button" id="roomsBtn"><b>Multiplayer</b><span>Race friends with a room code</span></button>
+      <button class="tile" type="button" id="champBtn"><b>Championship</b><span id="champNote">Online season</span></button>
+      <button class="tile" type="button" id="careerBtn"><b>Career</b><span id="careerNote">4-round offline season</span></button>
+      <button class="tile" type="button" id="ttBtn"><b>Time Trial</b><span>Beat your own ghost lap</span></button>
+      <button class="tile" type="button" id="tutBtn"><b>Tutorial</b><span>Controls, racing and rewards</span></button>
     </div>
-    <div class="opt"><span class="lbl">Race distance</span>
-      <div class="seg" data-opt="laps"><button type="button" data-v="3">3 laps</button><button type="button" data-v="5">5 laps</button><button type="button" data-v="8">8 laps</button></div>
-    </div>
-    <div class="opt"><span class="lbl">Rival pace</span>
-      <div class="seg" data-opt="diff"><button type="button" data-v="rookie">Rookie</button><button type="button" data-v="pro">Pro</button><button type="button" data-v="champion">Champion</button></div>
-    </div>
-    <div class="opt"><span class="lbl">Weather</span>
-      <div class="seg" data-opt="weather"><button type="button" data-v="dry">Dry</button><button type="button" data-v="changeable">Changeable</button><button type="button" data-v="wet">Wet</button></div>
-    </div>
-    <div class="opt"><span class="lbl">Starting tyre</span>
-      <div class="seg" data-opt="tyre"><button type="button" data-v="S"><i class="tc" style="color:#ff3b3b">S</i>Soft</button><button type="button" data-v="M"><i class="tc" style="color:#ffd23f">M</i>Medium</button><button type="button" data-v="H"><i class="tc" style="color:#f2f4f7">H</i>Hard</button><button type="button" data-v="I"><i class="tc" style="color:#2ee07f">I</i>Inter</button><button type="button" data-v="W"><i class="tc" style="color:#3aa0ff">W</i>Wet</button></div>
-    </div>
-    <div class="opt"><span class="lbl">Damage &amp; safety car</span>
-      <div class="seg" data-opt="damage"><button type="button" data-v="on">On</button><button type="button" data-v="off">Off</button></div>
-    </div>
-    <div class="opt touch-only"><span class="lbl">Steering</span>
-      <div class="seg" data-opt="steer"><button type="button" data-v="buttons">Buttons</button><button type="button" data-v="tilt">Tilt the phone</button></div>
-    </div>
-    <div class="opt touch-only"><span class="lbl">Vibration</span>
-      <div class="seg" data-opt="vibe"><button type="button" data-v="on">On</button><button type="button" data-v="off">Off</button></div>
-    </div>
-    <div class="opt"><span class="lbl">Camera</span>
-      <div class="seg" data-opt="cam"><button type="button" data-v="chase">Chase (turns with car)</button><button type="button" data-v="cockpit">Cockpit</button><button type="button" data-v="top">Overhead</button></div>
-    </div>
-    <div class="opt"><span class="lbl">Your team</span><div class="seg teams" data-opt="team" id="teamSeg"></div></div>
-    <div class="btns"><button class="go" id="startBtn" type="button">Quick race</button><button class="ghost" id="careerBtn" type="button">Championship</button><button class="ghost" id="ttBtn" type="button">Time trial</button></div>
-    <div class="keys">
-      <span><kbd>↑</kbd><kbd>W</kbd>Throttle</span>
-      <span><kbd>↓</kbd><kbd>S</kbd>Brake</span>
-      <span><kbd>←</kbd><kbd>→</kbd>Steer</span>
-      <span><kbd>Space</kbd>Deploy ERS</span>
-      <span><kbd>E</kbd>Open DRS (in a green zone)</span>
-      <span><kbd>B</kbd>Box this lap</span>
-      <span><kbd>1</kbd>–<kbd>5</kbd>Pick pit tyre</span>
-      <span><kbd>C</kbd>Camera: chase, cockpit, overhead</span>
-      <span><kbd>P</kbd>Pause</span>
+    <div class="opt"><span class="lbl">Your car &amp; team</span><div class="gsum" id="garageSum"></div></div>
+    <div class="dash-links" role="group" aria-label="Shortcuts">
+      <button type="button" data-link="garage">Garage</button><button type="button" data-link="levels">Levels &amp; tasks</button><button type="button" data-link="wallet">Wallet</button><button type="button" data-link="awards">Achievements</button><button type="button" data-link="leaders">Leaderboard</button>
     </div>
   </div>
 </section>
@@ -383,7 +589,7 @@ body.no-pits .pitbox{display:none}
 
 <section class="overlay center" id="hub" hidden>
   <div class="card">
-    <div class="eyebrow" id="hubEyebrow">Championship</div>
+    <div class="eyebrow" id="hubEyebrow">Career</div>
     <h2 class="title sm" id="hubTitle">Round 1</h2>
     <p class="sub" id="hubSub"></p>
     <div class="hub-grid">
@@ -410,11 +616,157 @@ body.no-pits .pitbox{display:none}
     <h2 class="title sm" id="resTitle">Finished</h2>
     <p class="sub" id="resSub"></p>
     <div class="table-wrap"><table><thead><tr id="resHead"><th>Pos</th><th>Driver</th><th>Team</th><th>Time</th><th>Best lap</th><th>Tyres</th></tr></thead><tbody id="resBody"></tbody></table></div>
+    <div class="xp-card" id="resXp" hidden aria-live="polite"></div>
     <div class="btns"><button class="go" id="againBtn" type="button">Race again</button><button class="ghost" id="replayBtn" type="button">Watch replay</button><button class="ghost" id="setupBtn" type="button">Change setup</button></div>
   </div>
 </section>
 
+<section class="overlay center" id="progress" hidden>
+  <div class="card prog-card">
+    <div class="eyebrow">Driver progression</div>
+    <div class="prog-head">
+      <h2 class="title sm" id="progTitle">Level 1</h2>
+      <button class="ghost" id="progClose" type="button">Back</button>
+    </div>
+    <p class="sub" id="progSub"></p>
+    <div class="xpbar big"><b id="progBar"></b></div>
+    <p class="prog-note" id="progNote"></p>
+    <div class="prog-body" id="progBody"></div>
+  </div>
+</section>
+
+<section class="overlay center" id="sheet" hidden>
+  <div class="card prog-card">
+    <div class="eyebrow" id="sheetEyebrow"></div>
+    <div class="prog-head">
+      <h2 class="title sm" id="sheetTitle"></h2>
+      <button class="ghost" id="sheetClose" type="button">Back</button>
+    </div>
+    <p class="sub" id="sheetSub"></p>
+    <div class="prog-body" id="sheetBody"></div>
+  </div>
+</section>
+
+<section class="overlay center" id="garage" hidden>
+  <div class="card prog-card">
+    <div class="eyebrow">Garage</div>
+    <div class="prog-head">
+      <h2 class="title sm" id="garTitle">Garage</h2>
+      <button class="ghost" id="garClose" type="button">Back</button>
+    </div>
+    <p class="sub" id="garSub"></p>
+    <div class="gtabs" role="tablist" aria-label="Garage sections">
+      <button type="button" role="tab" data-tab="car" aria-selected="true">Cars</button>
+      <button type="button" role="tab" data-tab="upg" aria-selected="false">Upgrades</button>
+      <button type="button" role="tab" data-tab="team" aria-selected="false">Team</button>
+    </div>
+    <div class="gar-msg" id="garMsg" aria-live="polite"></div>
+    <div class="gar-stats" id="garStats"></div>
+    <div id="garBody"></div>
+  </div>
+</section>
+
+<section class="overlay center" id="champ" hidden>
+  <div class="card prog-card">
+    <div class="eyebrow" id="chEyebrow">Championship</div>
+    <div class="prog-head">
+      <h2 class="title sm" id="chTitle">Championship</h2>
+      <button class="ghost" id="chClose" type="button">Back</button>
+    </div>
+    <p class="sub" id="chSub"></p>
+    <div class="ch-lock" id="chLock" hidden></div>
+    <div class="gtabs" role="tablist" aria-label="Championship sections">
+      <button type="button" role="tab" data-ctab="overview" aria-selected="true">Overview</button>
+      <button type="button" role="tab" data-ctab="schedule" aria-selected="false">Schedule</button>
+      <button type="button" role="tab" data-ctab="standings" aria-selected="false">Standings</button>
+      <button type="button" role="tab" data-ctab="leaders" aria-selected="false">Leaderboard</button>
+    </div>
+    <div class="gar-msg" id="chMsg" aria-live="polite"></div>
+    <div class="prog-body" id="chBody"></div>
+  </div>
+</section>
+
+<section class="overlay" id="qrSetup" hidden>
+  <div class="card">
+    <div class="prog-head"><h2 class="title sm">Quick Race</h2><button class="ghost" id="qrBack" type="button">Back</button></div>
+    <div class="eyebrow" id="menuEyebrow">Circuito Vespera · Night race</div>
+    <dl class="facts">
+      <div><dt>Length</dt><dd id="fLen">—</dd></div>
+      <div><dt>Corners</dt><dd id="fTurns">—</dd></div>
+      <div><dt>Your record</dt><dd id="fRec">—</dd></div>
+    </dl>
+    <div class="opt"><span class="lbl">Circuit</span><div class="tracks" id="trackGrid"></div></div>
+    <div class="opt"><span class="lbl">Race distance</span>
+      <div class="seg" data-opt="laps"><button type="button" data-v="3">3 laps</button><button type="button" data-v="5">5 laps</button><button type="button" data-v="8">8 laps</button></div>
+    </div>
+    <div class="opt"><span class="lbl">Cars on the grid (quick race)</span>
+      <div class="seg" data-opt="cars"><button type="button" data-v="5">5 cars</button><button type="button" data-v="8">8 cars</button><button type="button" data-v="14">14 cars</button></div>
+    </div>
+    <div class="opt"><span class="lbl">Rival pace <span class="tier-note" id="tierNote"></span></span>
+      <div class="seg" data-opt="diff"><button type="button" data-v="rookie">Rookie</button><button type="button" data-v="pro">Pro</button><button type="button" data-v="champion">Champion</button></div>
+    </div>
+    <div class="opt"><span class="lbl">Weather <span class="lock-note" data-cond></span></span>
+      <div class="seg" data-opt="weather"><button type="button" data-v="dry">Dry</button><button type="button" data-v="changeable">Changeable</button><button type="button" data-v="wet">Wet</button></div>
+    </div>
+    <div class="opt"><span class="lbl">Starting tyre <span class="lock-note" data-cond></span></span>
+      <div class="seg" data-opt="tyre"><button type="button" data-v="S"><i class="tc" style="color:#ff3b3b">S</i>Soft</button><button type="button" data-v="M"><i class="tc" style="color:#ffd23f">M</i>Medium</button><button type="button" data-v="H"><i class="tc" style="color:#f2f4f7">H</i>Hard</button><button type="button" data-v="I"><i class="tc" style="color:#2ee07f">I</i>Inter</button><button type="button" data-v="W"><i class="tc" style="color:#3aa0ff">W</i>Wet</button></div>
+    </div>
+    <div class="opt"><span class="lbl">Damage &amp; safety car</span>
+      <div class="seg" data-opt="damage"><button type="button" data-v="on">On</button><button type="button" data-v="off">Off</button></div>
+    </div>
+    <div class="opt touch-only"><span class="lbl">Steering</span>
+      <div class="seg" data-opt="steer"><button type="button" data-v="buttons">Buttons</button><button type="button" data-v="tilt">Tilt the phone</button></div>
+    </div>
+    <div class="opt touch-only"><span class="lbl">Vibration</span>
+      <div class="seg" data-opt="vibe"><button type="button" data-v="on">On</button><button type="button" data-v="off">Off</button></div>
+    </div>
+    <div class="opt"><span class="lbl">Camera</span>
+      <div class="seg" data-opt="cam"><button type="button" data-v="chase">Chase (turns with car)</button><button type="button" data-v="cockpit">Cockpit</button><button type="button" data-v="top">Overhead</button></div>
+    </div>
+    <div class="btns"><button class="go" id="startBtn" type="button">Start race</button></div>
+    <div class="keys">
+      <span><kbd>↑</kbd><kbd>W</kbd>Throttle</span>
+      <span><kbd>↓</kbd><kbd>S</kbd>Brake</span>
+      <span><kbd>←</kbd><kbd>→</kbd>Steer</span>
+      <span><kbd>Space</kbd>Deploy ERS</span>
+      <span><kbd>E</kbd>Open DRS (in a green zone)</span>
+      <span><kbd>B</kbd>Box this lap</span>
+      <span><kbd>1</kbd>–<kbd>5</kbd>Pick pit tyre</span>
+      <span><kbd>C</kbd>Camera: chase, cockpit, overhead</span>
+      <span><kbd>P</kbd>Pause</span>
+    </div>
+  </div>
+</section>
+
+<section class="overlay center" id="rooms" hidden>
+  <div class="card prog-card">
+    <div class="eyebrow">Multiplayer</div>
+    <div class="prog-head">
+      <h2 class="title sm" id="rmTitle">Race your friends</h2>
+      <button class="ghost" id="rmClose" type="button">Back</button>
+    </div>
+    <p class="sub" id="rmSub">Create a room, share its code, and up to 14 drivers race. A qualifying session sets the grid: the fastest lap starts on pole.</p>
+    <div class="gar-msg" id="rmMsg" aria-live="polite"></div>
+    <div class="prog-body" id="rmBody"></div>
+  </div>
+</section>
+
+<section class="levelup" id="levelUp" hidden role="dialog" aria-modal="true" aria-labelledby="luLevel">
+  <div class="lu-rays" aria-hidden="true"></div>
+  <div class="lu-card">
+    <div class="eyebrow" id="luEyebrow">Level up</div>
+    <div class="lu-level" id="luLevel">2</div>
+    <div class="lu-title" id="luTitle"></div>
+    <canvas class="lu-track" id="luTrack" hidden></canvas>
+    <ul class="lu-rewards" id="luRewards"></ul>
+    <button class="go" id="luOk" type="button">Continue</button>
+    <button class="ghost" id="luChamp" type="button" hidden>Open Championship</button>
+  </div>
+</section>
+
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
+<script src="cloud.js"></script>
 <script>
 (() => {
 'use strict';
@@ -445,8 +797,59 @@ const TRACKS = [
   { id: 'sabbia', name: 'Sabbia Mirage', kind: 'Desert circuit · dusk',
     cp: [[1800,1700],[1400,1700],[1000,1700],[700,1620],[560,1380],[700,1120],[1000,1060],[1160,860],[1020,620],[1160,410],[1500,380],[1760,540],[1720,840],[1920,1040],[2260,960],[2420,660],[2720,600],[2880,900],[2780,1300],[2520,1560],[2200,1700]],
     theme: { sky: '#3d2b1f', fog: [900, 3200], hemi: ['#ffd9a8', '#4a3420', 2.3], sun: ['#ffc080', 1.9], grass: ['#7a5c38', '#73573a'], apron: '#5c4630', lamps: 0.12 } },
+  { id: 'riva', name: 'Monte Riva', kind: 'Tight street circuit · midday',
+    cp: [[1700,1900],[1300,1900],[950,1880],[700,1760],[620,1500],[760,1300],[1000,1250],[1100,1050],[900,900],[700,780],[720,560],[950,470],[1250,520],[1400,700],[1600,640],[1750,450],[2050,420],[2250,560],[2200,800],[1980,900],[2050,1100],[2350,1150],[2550,1350],[2500,1650],[2250,1850],[2000,1900]],
+    theme: { sky: '#7fa3c4', fog: [1100, 4000], hemi: ['#f4f7ff', '#4a4f46', 2.6], sun: ['#fff1d6', 2.1], grass: ['#4b5058', '#474c54'], apron: '#5b5f67', lamps: 0.04 } },
+  { id: 'velocita', name: 'Autodromo Velocità', kind: 'Temple of speed · afternoon',
+    cp: [[2000,1950],[1500,1950],[1000,1950],[600,1900],[420,1650],[430,1350],[520,1250],[440,1120],[480,900],[600,600],[900,450],[1300,430],[1700,440],[2050,430],[2120,520],[2200,450],[2550,480],[2750,620],[2700,850],[2850,1000],[2850,1300],[2780,1550],[2600,1800],[2300,1940]],
+    theme: { sky: '#8fb8de', fog: [1300, 4600], hemi: ['#ffffff', '#3c6b34', 2.5], sun: ['#ffe4b0', 2.1], grass: ['#2f6b2a', '#367a30'], apron: '#3a3d42', lamps: 0.04 } },
+  { id: 'bosco', name: 'Bosco Verde Ring', kind: 'Forest circuit · misty morning',
+    cp: [[1900,1900],[1400,1900],[950,1850],[600,1650],[500,1300],[650,1000],[500,750],[600,480],[950,400],[1200,600],[1350,900],[1600,1000],[1800,800],[1900,500],[2250,380],[2650,480],[2800,800],[2600,1050],[2350,1100],[2300,1350],[2650,1500],[2700,1750],[2400,1900]],
+    theme: { sky: '#8e9b95', fog: [700, 2800], hemi: ['#d8e6dc', '#1c3020', 2.2], sun: ['#e8f0e0', 1.5], grass: ['#1f4a26', '#255a2e'], apron: '#2c3034', lamps: 0.06 } },
+  { id: 'neon', name: 'Neon Bay', kind: 'Night city circuit',
+    cp: [[2000,1900],[1600,1900],[1150,1900],[800,1900],[600,1800],[550,1550],[700,1400],[1000,1380],[1100,1200],[1000,1000],[650,980],[500,800],[550,550],[800,450],[1200,450],[1400,600],[1450,900],[1700,1000],[1950,900],[2000,600],[2200,450],[2600,480],[2800,700],[2750,1100],[2500,1250],[2550,1550],[2750,1700],[2600,1880],[2350,1900]],
+    theme: { sky: '#0a0618', fog: [800, 3200], hemi: ['#b49cff', '#140c24', 1.7], sun: ['#c9b8ff', 1.2], grass: ['#191b26', '#1d2030'], apron: '#262838', lamps: 0.25 } },
 ];
 const CAL = ['vespera', 'porto', 'highland', 'sabbia'];
+// difficulty 1-5 and what makes each circuit different (shown on the track cards)
+const TRACK_INFO = {
+  vespera:  { diff: 2, traits: 'Long main straight · mixed corners' },
+  porto:    { diff: 3, traits: 'Harbour walls · slow chicanes' },
+  highland: { diff: 2, traits: 'Fast sweepers · few braking zones' },
+  sabbia:   { diff: 3, traits: 'Long straights into heavy braking' },
+  riva:     { diff: 5, traits: 'Tight and twisty · hard to overtake' },
+  velocita: { diff: 2, traits: 'Flat-out straights · two chicanes' },
+  bosco:    { diff: 4, traits: 'Flowing forest curves · a slow hairpin' },
+  neon:     { diff: 4, traits: 'City grid · right-angle corners' },
+};
+// unlock levels come from the server (public.tracks); these defaults are used offline and for guests
+const DEFAULT_UNLOCK = { vespera: 1, porto: 4, highland: 7, sabbia: 13, riva: 18, velocita: 24, bosco: 31, neon: 38 };
+const CONDITIONS_LEVEL = 10; // Level 10: choose weather and starting tyre, see track stats
+function playerLevel() { const c = window.LOGP_CLOUD; return c && c.state.status === 'signed-in' && c.state.profile ? c.state.profile.level : 1; }
+function unlockLevel(id) { const c = window.LOGP_CLOUD, t = c && c.state.tracks && c.state.tracks.find(x => x.id === id); return t ? t.unlock_level : (DEFAULT_UNLOCK[id] || 1); }
+const trackOpen = id => unlockLevel(id) <= playerLevel();
+const conditionsOpen = () => playerLevel() >= CONDITIONS_LEVEL;
+// the Quick Race circuit: the saved choice if it is unlocked, otherwise the newest unlocked one
+function quickTrack() { if (trackOpen(settings.track)) return settings.track; const open = TRACKS.filter(t => trackOpen(t.id)); return (open[open.length - 1] || TRACKS[0]).id; }
+// track outline for previews, built the same way as the real circuit
+function trackOutline(def) {
+  if (def._outline) return def._outline;
+  const CP = expandCP(def.cp), pts = [];
+  for (let i = 0, n = CP.length; i < n; i++) { const a = CP[(i - 1 + n) % n], b = CP[i], c = CP[(i + 1) % n], d = CP[(i + 2) % n]; for (let k = 0; k < 6; k++) pts.push(cr(a, b, c, d, k / 6)); }
+  let len = 0; for (let i = 0; i < pts.length; i++) { const a = pts[i], b = pts[(i + 1) % pts.length]; len += Math.hypot(b[0] - a[0], b[1] - a[1]); }
+  return (def._outline = { pts, km: len * KMH / 3.6 / 1000 });
+}
+function drawTrackPreview(canvas, def, opts) {
+  const o = trackOutline(def), g = canvas.getContext('2d'), dpr = Math.min(2, window.devicePixelRatio || 1);
+  const w = canvas.clientWidth || canvas.width, h = canvas.clientHeight || canvas.height;
+  canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9; for (const [x, y] of o.pts) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+  const pad = 10, sc = Math.min((w - pad * 2) / (x1 - x0), (h - pad * 2) / (y1 - y0)), ox = (w - (x1 - x0) * sc) / 2 - x0 * sc, oy = (h - (y1 - y0) * sc) / 2 - y0 * sc;
+  g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+  g.beginPath(); o.pts.forEach(([x, y], i) => i ? g.lineTo(x * sc + ox, y * sc + oy) : g.moveTo(x * sc + ox, y * sc + oy)); g.closePath();
+  g.lineJoin = 'round'; g.lineWidth = 3.5; g.strokeStyle = opts && opts.locked ? 'rgba(255,255,255,.25)' : (opts && opts.color) || 'rgba(255,255,255,.85)'; g.stroke();
+  const [sx, sy] = o.pts[0]; g.fillStyle = opts && opts.locked ? 'rgba(255,255,255,.3)' : '#ff2b38'; g.beginPath(); g.arc(sx * sc + ox, sy * sc + oy, 3.5, 0, TAU); g.fill();
+}
 const trackById = id => TRACKS.find(t => t.id === id) || TRACKS[0];
 let TRACK = TRACKS[0];
 function cr(a, b, c, d, t) {
@@ -582,7 +985,9 @@ const DRIVERS = [
 ];
 const RIVALS = DRIVERS.map(([code, name, tid, f]) => { const t = teamById(tid); return { code, name, team: t.name, teamId: tid, color: t.color, alt: t.alt, pace: +(t.pace * f).toFixed(4) }; })
   .sort((a, b) => b.pace - a.pace);
-const myTeamId = () => (mode === 'career' && career && career.team) || settings.team;
+const DEFAULT_TEAM_UNLOCK = { tidewater: 1, aurora: 3, halcyon: 6, meridian: 9, vortex: 15, corsa: 21, kestrel: 27 };
+const cloudGarage = () => { const c = window.LOGP_CLOUD; return c && c.state.status === 'signed-in' && c.state.garage ? c.state.garage : null; };
+const myTeamId = () => (mode === 'career' && career && career.team) || (cloudGarage() && cloudGarage().selected_team) || (DEFAULT_TEAM_UNLOCK[settings.team] === 1 ? settings.team : 'tidewater');
 // the 13 rivals racing you: your team-mate stays, the team's other seat is yours
 const fieldRivals = () => { const tid = myTeamId(), seat = RIVALS.filter(r => r.teamId === tid).pop(); return RIVALS.filter(r => r !== seat); };
 const DIFF = { rookie: 0.87, pro: 0.935, champion: 0.985 };
@@ -749,9 +1154,10 @@ function requestBox(on, t) {
 /* ---------- storage ---------- */
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
-  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} if (window.LOGP_CLOUD) window.LOGP_CLOUD.dirty(); },
 };
-const settings = Object.assign({ laps: 3, diff: 'pro', team: 'tidewater', cam: 'chase', weather: 'dry', tyre: 'M', track: 'vespera', steer: 'buttons', vibe: 'on', tiltInvert: false, damage: 'on' }, store.get('logp-settings', {}));
+const SETTINGS_DEFAULT = { laps: 3, cars: 5, diff: 'pro', team: 'tidewater', cam: 'chase', weather: 'dry', tyre: 'M', track: 'vespera', steer: 'buttons', vibe: 'on', tiltInvert: false, damage: 'on' };
+const settings = Object.assign({}, SETTINGS_DEFAULT, store.get('logp-settings', {}));
 const getRecord = () => store.get('logp-rec2-' + TRACK.id, null);
 const setRecord = t => store.set('logp-rec2-' + TRACK.id, t);
 let mode = 'quick', session = 'race', career = store.get('logp-career2', null), qualiTimes = null;
@@ -773,14 +1179,15 @@ let rec = null;
 const rp = { t: 0, speed: 1, playing: true, focus: 0, cam: 'tv', camIdx: -1, snap: null, jump: true, dragging: false };
 
 function makeCar(def, slot, skill, isPlayer) {
+  const tier = !isPlayer && mode === 'quick' ? challengeTier() : 0;
   const back = Math.round((40 + slot * 52) / ds), i = at(-back), lat = (slot % 2 ? 1 : -1) * 30;
   return Object.assign({}, def, {
-    isPlayer, skill, ai: !isPlayer, vmax: VMAX * (isPlayer ? 1 : skill),
+    isPlayer, skill, ai: !isPlayer, tier, vmax: VMAX * (isPlayer ? 1 : skill),
     x: X[i] + NX[i] * lat, y: Y[i] + NY[i] * lat, a: ANG[i], vx: 0, vy: 0, vf: 0, vl: 0, steer: 0, ers: 1,
     idx: i, total: -back, lapIdx: -1, lapStart: 0, last: null, best: null, finished: false, finishTime: null, order: 0,
     cp: -1, times: [], off: false, kerb: false, lat, baseOff: (Math.random() - 0.5) * 30, offset: lat * 0.5,
     reactAt: 0, boosting: false, braking: false, thr: 0, prevSkid: null, moved: 0,
-    tyre: 'M', wear: 0, grip: 1, stints: [], stops: 0, pit: null, boxReq: false, nextTyre: 'M', decided: -2, advised: {}, aero: 1, brkMul: 1, ersMul: 1,
+    tyre: 'M', wear: 0, grip: 1, stints: [], stops: 0, pit: null, boxReq: false, nextTyre: 'M', decided: -2, advised: {}, aero: 1, brkMul: 1, ersMul: 1, accMul: 1, turnMul: 1, wearMul: 1,
     defendT: 0, defendCool: 0, defendOff: 0, mistakeT: 0, inBrake: false, attacking: false, tow: false,
     wing: 0, dnf: false, dnfWhy: '', failAt: 0, failT: 0, smokeT: 0, penalty: 0, scPos: null,
     drs: false, drsAvail: false, drsDet: [], drsElig: [], drsZone: -1, drsFrom: 1, tl: 0, limOut: false, limPos: 0, giveBack: null, lapInvalid: false, stopAt: 1,
@@ -792,9 +1199,11 @@ function applyUpgrades(c) {
   const u = career.up;
   c.vmax = VMAX * (1 + 0.018 * u.engine); c.aero = 1 + 0.025 * u.aero; c.brkMul = 1 + 0.06 * u.brakes; c.ersMul = 1 + 0.15 * u.ers;
 }
+// challenge tier 0-20 (server-side, rises with Quick Race wins): faster, sharper rivals, never rubber-banding
+const challengeTier = () => { const c = window.LOGP_CLOUD; return c && c.state.status === 'signed-in' && c.state.profile ? (c.state.profile.challenge || 0) : 0; };
 function rivalSkill(d) {
   const diff = DIFF[mode === 'career' && career ? career.diff : settings.diff] || DIFF.pro;
-  return diff * d.pace * (mode === 'career' && career ? 1 + 0.006 * career.round : 1);
+  return diff * d.pace * (mode === 'career' && career ? 1 + 0.006 * career.round : 1) * (mode === 'quick' ? 1 + 0.0035 * challengeTier() : 1);
 }
 function placeRolling(c, back, v) {
   const i = at(back);
@@ -804,15 +1213,17 @@ function placeRolling(c, back, v) {
 // order: optional grid as a list of driver codes ('YOU' for the player)
 function buildField(withPlayer, order) {
   cars = []; player = null;
-  const pool = withPlayer ? fieldRivals() : RIVALS.slice();
+  let pool = withPlayer ? fieldRivals() : RIVALS.slice();
+  // Quick Race field size (5 / 8 / 14 cars): an even spread of rivals from fastest to slowest
+  if (withPlayer && !order && mode === 'quick') { pool = pool.slice(0, Math.max((settings.cars || 5) - 1, pool.length - challengeTier())); const n = clamp((settings.cars || 5) - 1, 1, pool.length); pool = n === 1 ? [pool[0]] : Array.from({ length: n }, (_, i) => pool[Math.round(i * (pool.length - 1) / (n - 1))]); }
   let grid;
   if (order) grid = order.map(code => code === 'YOU' ? 'YOU' : pool.find(r => r.code === code)).filter(Boolean);
-  else { grid = pool.slice(); if (withPlayer) grid.splice(PLAYER_SLOT, 0, 'YOU'); }
+  else { grid = pool.slice(); if (withPlayer) grid.splice(Math.min(PLAYER_SLOT, Math.floor(grid.length / 2)), 0, 'YOU'); }
   grid.forEach((d, slot) => {
-    if (d === 'YOU') { player = makeCar(playerDef(), slot, 1, true); applyUpgrades(player); cars.push(player); }
+    if (d === 'YOU') { player = makeCar(playerDef(), slot, 1, true); applyUpgrades(player); applyGarage(player); cars.push(player); }
     else cars.push(makeCar(d, slot, rivalSkill(d), false));
   });
-  for (const c of cars) { c.stopAt = 1 + Math.floor(Math.random() * Math.max(1, LAPS - 1)); const t = c.isPlayer ? settings.tyre : aiStartTyre(); c.tyre = t; c.stints = [t]; c.nextTyre = TYRES[t].wet ? t : (t === 'S' ? 'M' : t === 'M' ? 'H' : 'M'); }
+  for (const c of cars) { c.stopAt = 1 + Math.floor(Math.random() * Math.max(1, LAPS - 1)); const t = c.isPlayer ? (mode === 'quick' && !conditionsOpen() ? 'M' : settings.tyre) : aiStartTyre(); c.tyre = t; c.stints = [t]; c.nextTyre = TYRES[t].wet ? t : (t === 'S' ? 'M' : t === 'M' ? 'H' : 'M'); }
   overallBest = Infinity; fastestCar = null; finishCount = 0; skidN = 0; parts.length = 0;
   syncCarMeshes();
 }
@@ -830,7 +1241,7 @@ function stepCar(c, dt, inp) {
   let vcap = vmax;
   if (vsc && state === 'race') vcap = Math.min(vcap, VSC_SPEED);
   if (sc && c.isPlayer && !c.ai) { const gapSC = sc.s - c.total; vcap = Math.min(vmax, gapSC < 8 ? Math.max(60, sc.v * 0.9) : VMAX * 0.62); }
-  const acc = ACC * (boost ? 1.3 : 1) * (0.8 + 0.2 * Math.min(1.05, g));
+  const acc = ACC * (c.accMul || 1) * (boost ? 1.3 : 1) * (0.8 + 0.2 * Math.min(1.05, g));
   let drag = ACC / vcap; if (c.off) drag += 2.4;
   if (inp.thr > 0) vf += acc * inp.thr * dt;
   if (inp.brk > 0) { if (vf > 5) vf = Math.max(0, vf - BRK * g * c.brkMul * inp.brk * dt); else vf = Math.max(-140, vf - 260 * inp.brk * dt); }
@@ -840,7 +1251,7 @@ function stepCar(c, dt, inp) {
   const sp = Math.abs(vf);
   c.steer += clamp(inp.steer - c.steer, -dt * 7, dt * 7);
   const sf = Math.min(1, sp / 140) * (1 - 0.35 * Math.min(1, sp / VMAX));
-  c.a = wrapA(c.a + c.steer * TURN * Math.min(1.04, 0.35 + 0.65 * g) * sf * dt * (vf < 0 ? -1 : 1));
+  c.a = wrapA(c.a + c.steer * TURN * (c.turnMul || 1) * Math.min(1.04, 0.35 + 0.65 * g) * sf * dt * (vf < 0 ? -1 : 1));
   c.vx = vf * ca - vl * sa; c.vy = vf * sa + vl * ca;
   c.x += c.vx * dt; c.y += c.vy * dt;
   c.vf = vf; c.vl = vl;
@@ -848,7 +1259,7 @@ function stepCar(c, dt, inp) {
   else { if (c.braking) c.ers = Math.min(1, c.ers + 0.32 * c.ersMul * dt); c.ers = Math.min(1, c.ers + 0.015 * dt); }
   trackUpdate(c);
   trackLimits(c);
-  if (state !== 'menu' && session !== 'tt' && c.moved > 0) c.wear = Math.min(1, c.wear + c.moved / (TYRES[c.tyre].life * N) * wearMult(c));
+  if (state !== 'menu' && session !== 'tt' && c.moved > 0) c.wear = Math.min(1, c.wear + c.moved / (TYRES[c.tyre].life * N) * wearMult(c) * (c.wearMul || 1));
 }
 // slipstream: running close behind another car cuts drag
 function hitDamage(c, v) {
@@ -869,7 +1280,7 @@ function retire(c, why) {
   if (Math.random() < (why === 'Engine failure' ? 0.75 : 0.35)) deployVSC(); else deploySC();
 }
 function deploySC() {
-  if (sc || settings.damage === 'off' || session !== 'race' || state !== 'race') return;
+  if (sc || mode === 'mp' || settings.damage === 'off' || session !== 'race' || state !== 'race') return;
   const act = cars.filter(c => !c.dnf && !c.pit && !c.finished).sort((a, b) => b.total - a.total);
   if (!act.length || Math.floor(act[0].total / N) >= LAPS - 1) return; // never on the final lap
   vsc = null;
@@ -964,7 +1375,7 @@ function trackLimits(c) {
 const compoundOK = c => c.stints.some(t => TYRES[t].wet) || new Set(c.stints).size >= 2;
 function otherDry(c, left) { return c.tyre === 'S' ? 'M' : c.tyre === 'M' ? (left <= 2 ? 'S' : 'H') : 'M'; }
 function deployVSC() {
-  if (sc || vsc || settings.damage === 'off' || session !== 'race' || state !== 'race') return;
+  if (sc || vsc || mode === 'mp' || settings.damage === 'off' || session !== 'race' || state !== 'race') return;
   vsc = { phase: 'on', endAt: simT + 14 + Math.random() * 10, greenAt: 0 };
   showToast('Virtual safety car', 't-vsc', 2.4, 'Slow down · no overtaking');
   radio('VSC deployed. Slow down, no overtaking.'); buzz('medium');
@@ -982,7 +1393,7 @@ function towCheck(c) {
   if (c.vf < 250) return false;
   const ca = Math.cos(c.a), sa = Math.sin(c.a);
   for (const o of cars) {
-    if (o === c || o.pit || o.dnf) continue;
+    if (o === c || o.pit || o.dnf || o.remote) continue;
     const dx = o.x - c.x, dy = o.y - c.y, fwd = dx * ca + dy * sa;
     if (fwd < 30 || fwd > 170) continue;
     if (Math.abs(-dx * sa + dy * ca) < 20) return true;
@@ -1011,7 +1422,7 @@ function collide() {
   const R = 22, R2 = R * R;
   for (let i = 0; i < cars.length; i++) for (let j = i + 1; j < cars.length; j++) {
     const a = cars[i], b = cars[j];
-    if (a.pit || b.pit || a.dnf || b.dnf) continue;
+    if (a.pit || b.pit || a.dnf || b.dnf || a.remote || b.remote) continue; // other players are ghosts
     if (Math.abs(a.x - b.x) > 60 || Math.abs(a.y - b.y) > 60) continue;
     const ca = Math.cos(a.a), sa = Math.sin(a.a), cb = Math.cos(b.a), sb = Math.sin(b.a);
     for (const ka of [-9, 9]) for (const kb of [-9, 9]) {
@@ -1037,7 +1448,7 @@ function aiInput(c, dt) {
   const sp = c.vf || 0, ca = Math.cos(c.a), sa = Math.sin(c.a);
   let target = RL[at(c.idx + 6)] * 0.85 + c.baseOff * 0.25, attack = null, attackF = 1e9, behind = null, lapper = null;
   for (const o of cars) {
-    if (o === c || o.pit || o.dnf) continue;
+    if (o === c || o.pit || o.dnf || o.remote) continue;
     const dx = o.x - c.x, dy = o.y - c.y, fwd = dx * ca + dy * sa, side = -dx * sa + dy * ca;
     if (fwd > 0 && fwd < 110 && Math.abs(side) < 30 && (o.vf || 0) < sp + 30 && fwd < attackF) { attack = o; attackF = fwd; }
     if (fwd < -10 && fwd > -100 && Math.abs(side) < 45) { behind = o; if (o.total - c.total > N * 0.5) lapper = o; }
@@ -1056,7 +1467,7 @@ function aiInput(c, dt) {
     target = (attack.lat || 0) + sideSign * 42; c.attacking = true; c.defendT = 0;
   } else if (behind && Math.abs(K[at(c.idx + 12)]) < 0.0012 && c.defendT <= 0 && c.defendCool <= 0) {
     // defend: cover the attacker's line once per straight, no weaving
-    c.defendOff = clamp(behind.lat || 0, -W / 2 + 22, W / 2 - 22); c.defendT = 2.2; c.defendCool = 5;
+    c.defendOff = clamp(behind.lat || 0, -W / 2 + 22, W / 2 - 22); c.defendT = 2.2; c.defendCool = 5 - 0.12 * (c.tier || 0);
   }
   if (c.defendT > 0) { c.defendT -= dt; if (!attack && !lapper && !hold) target = c.defendOff; }
   if (c.defendCool > 0) c.defendCool -= dt;
@@ -1086,11 +1497,12 @@ function aiInput(c, dt) {
     thr: sp < vt - 4 ? 1 : 0,
     brk: sp > vt + 14 ? 1 : 0,
     steer,
-    ers: !sc && !vsc && straight && (c.attacking ? c.ers > 0.12 : c.ers > 0.35),
+    ers: !sc && !vsc && straight && (c.attacking ? c.ers > 0.12 : c.ers > 0.35 - 0.01 * (c.tier || 0)),
     drs: true,
   };
 }
 function playerInput() {
+  if (mp.frozen) return { thr: 0, brk: 1, steer: 0, ers: false, drs: false }; // connection lost: the car stops until it is back
   const k = n => keys[n] || touchKeys[n];
   let steer = (k('right') ? 1 : 0) - (k('left') ? 1 : 0);
   if (!steer && tilt.on) steer = tilt.steer;
@@ -1219,7 +1631,8 @@ function update(dt) {
   simT += dt;
   if (state === 'lights') {
     lightsT += dt;
-    const lit = lightsT >= 0.9 * 5 + lightsHold ? -1 : Math.min(5, Math.floor(lightsT / 0.9));
+    // -1 means lights out; a start synced to the race server can begin with lightsT below zero, which must stay 'no lights yet'
+    const lit = lightsT >= 0.9 * 5 + lightsHold ? -1 : clamp(Math.floor(lightsT / 0.9), 0, 5);
     if (lit !== litShown) {
       if (lit === -1) lightsOut(); else { setLights(lit); if (lit > 0) beep(440, 0.12); }
       litShown = lit;
@@ -1237,6 +1650,7 @@ function update(dt) {
   } else scQueue = null;
   if (vsc) stepVSC();
   for (const c of cars) {
+    if (c.remote) { mpMoveRemote(c, dt); continue; }
     if (c.dnf) { if (c.smokeT > 0) c.smokeT -= dt; continue; }
     if (c.failAt && simT >= c.failAt && !c.failT && !c.finished && !c.pit && state === 'race') { c.failAt = 0; c.failT = 4; c.smokeT = 4; }
     if (c.failT > 0) { c.failT -= dt; if (c.failT <= 0) retire(c, 'Engine failure'); }
@@ -1303,7 +1717,7 @@ function startRace() {
   if (mode === 'career') {
     loadTrack(trackById(CAL[career.round])); LAPS = career.laps; setupWeather(career.weather);
     buildField(true, career.grid || fieldRivals().map(r => r.code).concat('YOU'));
-  } else { loadTrack(trackById(settings.track)); LAPS = settings.laps; setupWeather(settings.weather); buildField(true); }
+  } else { loadTrack(trackById(quickTrack())); LAPS = settings.laps; setupWeather(conditionsOpen() ? settings.weather : 'dry'); buildField(true); }
   $('#hub').hidden = true;
   $('#radio').hidden = true; refreshPitUI();
   state = 'lights'; lightsT = 0; litShown = -1; lightsHold = 0.4 + Math.random() * 1.2;
@@ -1311,6 +1725,7 @@ function startRace() {
   $('#menu').hidden = true; $('#results').hidden = true; $('#pause').hidden = true;
   hud.hidden = false; buildRows(); snapCamera(player);
   showToast('', '', 0);
+  beginRaceTicket();
 }
 function lightsOut() {
   state = 'race'; raceT0 = simT;
@@ -1319,7 +1734,7 @@ function lightsOut() {
   for (const c of cars) { c.lapStart = simT; c.reactAt = simT + (c.ai ? 0.15 + Math.random() * 0.35 : 0); }
   showToast('Lights out', '', 1.4, 'and away we go'); buzz('medium');
   if (session === 'race') recStart();
-  if (session === 'race' && settings.damage !== 'off' && Math.random() < 0.35) {
+  if (session === 'race' && mode !== 'mp' && settings.damage !== 'off' && Math.random() < 0.35) {
     const pool = cars.filter(c => c.ai);
     const v = pool[Math.floor(Math.random() * pool.length)];
     if (v) v.failAt = simT + 15 + Math.random() * Math.max(10, (LAPS - 1) * 70);
@@ -1347,7 +1762,9 @@ function onPlayerFinish() {
     return;
   }
   showToast('Chequered flag', '', 2, 'Race complete');
-  setTimeout(() => { if (state === 'finished') { $('#results').hidden = false; renderResults(); } }, 2200);
+  if (mode === 'mp') { mpSendState(true); setTimeout(() => { if (state === 'finished') { $('#results').hidden = false; renderResults(); } }, 2200); return; }
+  submitRaceResult();
+  setTimeout(() => { if (state === 'finished') { $('#results').hidden = false; renderResults(); renderXpCard(); } }, 2200);
 }
 let toastTimer = 0;
 function showToast(text, cls, dur, label) {
@@ -1358,6 +1775,7 @@ function showToast(text, cls, dur, label) {
   toastTimer = setTimeout(() => toastEl.classList.remove('show'), dur * 1000);
 }
 function renderResults() {
+  if (mode === 'mp') { renderMpResults(); return; }
   const st = standings(), L = st[0], pos = st.indexOf(player) + 1, champ = mode === 'career';
   $('#resHead').innerHTML = '<th>Pos</th><th>Driver</th><th>Team</th><th>Time</th><th>Best lap</th><th>Tyres</th><th>Pts</th>';
   $('#resEyebrow').textContent = (champ ? 'Round ' + (career.round + 1) + ' · ' : 'Classification · ') + TRACK.name;
@@ -1377,18 +1795,22 @@ function renderResults() {
 }
 setInterval(() => { if (!$('#results').hidden) renderResults(); }, 400);
 function setPaused(p) {
+  // a live race keeps running for everyone else, so it can never be paused (switching apps or windows included)
+  if (p && mode === 'mp') { if (state === 'race') showToast('Live race', '', 1.6, 'Live races cannot be paused'); return; }
   if (p && (state === 'race' || state === 'lights')) { state = 'paused:' + state; $('#pause').hidden = false; }
   else if (!p && state.startsWith('paused:')) { state = state.slice(7); $('#pause').hidden = true; last = performance.now(); }
 }
 function quitToMenu() {
+  if (mode === 'tutorial') { clearInterval(tutTimer); tut = null; $('#coach').hidden = true; mode = 'quick'; }
   $('#pause').hidden = true; $('#results').hidden = true; hud.hidden = true; lightsEl.classList.add('gone');
   showToast('', '', 0);
   if (mode === 'career') { showHub(); return; }
+  if (mode === 'mp') { mpLeaveRace(); return; }
   backToMenu();
 }
 function backToMenu() {
   mode = 'quick'; session = 'race'; hideTT(); document.body.classList.remove('no-pits');
-  ['#pause', '#results', '#hub'].forEach(id => { $(id).hidden = true; }); hud.hidden = true; lightsEl.classList.add('gone');
+  ['#pause', '#results', '#hub', '#qrSetup'].forEach(id => { $(id).hidden = true; }); hud.hidden = true; lightsEl.classList.add('gone');
   loadTrack(trackById(settings.track)); refreshMenu(); $('#menu').hidden = false; startAttract();
 }
 
@@ -1566,7 +1988,7 @@ function showHub() {
   const t = trackById(CAL[Math.min(career.round, CAL.length - 1)]);
   loadTrack(t); startAttract();
   const table = seasonTable(), myPos = table.findIndex(r => r.e.code === 'YOU') + 1;
-  $('#hubEyebrow').textContent = over ? 'Championship · season complete' : 'Championship · Round ' + (career.round + 1) + ' of ' + CAL.length;
+  $('#hubEyebrow').textContent = over ? 'Career · season complete' : 'Career · Round ' + (career.round + 1) + ' of ' + CAL.length;
   $('#hubTitle').textContent = over ? (myPos === 1 ? 'Champion' : 'Season over · P' + myPos) : t.name;
   $('#hubSub').textContent = over ? (table[0].e.code === 'YOU' ? 'You win' : table[0].e.name + ' wins') + ' the title with ' + table[0].pts + ' points.' : t.kind + ' · ' + (LEN * KMH / 3.6 / 1000).toFixed(2) + ' km · ' + CORNERS + ' corners · ' + career.laps + ' laps';
   $('#hubStand').innerHTML = table.map((r, i) => '<tr class="' + (r.e.code === 'YOU' ? 'me' : '') + '"><td class="p">' + (i + 1) + '</td><td><span class="chip" style="background:' + r.e.color + '"></span>' + r.e.name + '</td><td>' + r.e.team + '</td><td class="num">' + r.pts + '</td></tr>').join('');
@@ -1723,16 +2145,24 @@ function updateTower() {
     $('#posBig').innerHTML = 'P' + (list.findIndex(q => q.me) + 1) + '<small>/' + list.length + '</small>';
     return;
   }
+  if (mode === 'mp' && mp.race && mp.race.kind === 'quali') {
+    const best = c => c.remote ? c.qbest : c.best, q = cars.slice().sort((a, b) => (best(a) == null ? 1e9 : best(a)) - (best(b) == null ? 1e9 : best(b)));
+    q.forEach((c, i) => { const e = rowEls[i]; if (!e) return; e.r.hidden = false; e.pos.textContent = i + 1; e.bar.style.background = c.color; e.code.textContent = c.code; e.gap.textContent = best(c) == null ? 'NO TIME' : fmt(best(c)); e.gap.classList.remove('pit', 'out'); e.tc.textContent = c.tyre; e.tc.style.color = TYRES[c.tyre].color; e.r.classList.toggle('me', c.isPlayer); });
+    const left = Math.max(0, Math.ceil((mp.race.endsAt - mpNow()) / 1000));
+    $('#lapText').textContent = 'QUALIFYING ' + Math.floor(left / 60) + ':' + String(left % 60).padStart(2, '0');
+    $('#posBig').innerHTML = 'P' + (q.indexOf(player) + 1) + '<small>/' + cars.length + '</small>';
+    return;
+  }
   const st = standings(), L = st[0];
   st.forEach((c, i) => {
     const e = rowEls[i]; if (!e) return;
     e.pos.textContent = i + 1; e.bar.style.background = c.color;
-    e.code.innerHTML = c.code + (c === fastestCar ? '<i class="fl" title="Fastest lap"></i>' : '') + (c.penalty ? '<span class="pen">+' + c.penalty + 's</span>' : '');
+    e.code.innerHTML = c.code + (c.aiFill ? '<span class="ai-tag">AI</span>' : '') + (c.remote && c.offline ? '<span class="ai-tag">OFF</span>' : '') + (c === fastestCar ? '<i class="fl" title="Fastest lap"></i>' : '') + (c.penalty ? '<span class="pen">+' + c.penalty + 's</span>' : '');
     e.gap.textContent = gapText(c, L); e.gap.classList.toggle('pit', !!c.pit); e.gap.classList.toggle('out', !!c.dnf);
     e.tc.textContent = c.tyre; e.tc.style.color = TYRES[c.tyre].color;
     e.r.classList.toggle('me', c.isPlayer);
   });
-  $('#lapText').textContent = 'LAP ' + clamp(player.lapIdx + 1, 1, LAPS) + '/' + LAPS;
+  $('#lapText').textContent = mode === 'tutorial' ? 'TUTORIAL' : 'LAP ' + clamp(player.lapIdx + 1, 1, LAPS) + '/' + LAPS;
   $('#posBig').innerHTML = 'P' + (st.indexOf(player) + 1) + '<small>/' + cars.length + '</small>';
 }
 setInterval(updateTower, 250);
@@ -2352,7 +2782,7 @@ addEventListener('keydown', e => {
   if (e.code === 'KeyB' && player) requestBox(!player.boxReq);
   const tk = { Digit1: 'S', Digit2: 'M', Digit3: 'H', Digit4: 'I', Digit5: 'W' }[e.code];
   if (tk) requestBox(true, tk);
-  if (e.code === 'KeyR' && (state === 'race' || state.startsWith('paused'))) { $('#pause').hidden = true; session === 'quali' ? startQuali() : session === 'tt' ? startTT() : startRace(); }
+  if (e.code === 'KeyR' && (state === 'race' || state.startsWith('paused'))) { $('#pause').hidden = true; mode === 'tutorial' ? startTutorial() : mode === 'mp' ? null : session === 'quali' ? startQuali() : session === 'tt' ? startTT() : startRace(); }
 });
 addEventListener('keyup', e => { const k = KEYMAP[e.code]; if (k) keys[k] = false; });
 addEventListener('blur', () => { for (const k in keys) keys[k] = false; setPaused(true); });
@@ -2368,41 +2798,904 @@ document.querySelectorAll('#touch button').forEach(btn => {
 });
 
 /* ---------- menu ---------- */
+let trackStatsCache = null, trackStatsAt = 0;
+function renderTrackGrid() {
+  const grid = $('#trackGrid'); if (!grid) return;
+  const cur = quickTrack(), showStats = conditionsOpen() && trackStatsCache;
+  if (!grid.children.length) {
+    grid.innerHTML = TRACKS.map(t => '<button type="button" class="tcard" data-track="' + t.id + '"><canvas aria-hidden="true"></canvas><span class="tn">' + esc(t.name) + '</span><span class="tk">' + esc(t.kind) + '</span><span class="tm"><span class="km"></span><span class="dots" title="Difficulty"></span></span><span class="ts"></span><span class="tk tr"></span><span class="lockb" hidden></span></button>').join('');
+    grid.addEventListener('click', e => {
+      const b = e.target.closest('.tcard'); if (!b || b.classList.contains('locked')) return;
+      settings.track = b.dataset.track; store.set('logp-settings', settings); refreshMenu();
+    });
+  }
+  for (const b of grid.children) {
+    const t = trackById(b.dataset.track), info = TRACK_INFO[t.id] || { diff: 2, traits: '' }, lv = unlockLevel(t.id), open = lv <= playerLevel();
+    b.classList.toggle('locked', !open); b.setAttribute('aria-disabled', String(!open)); b.setAttribute('aria-pressed', String(t.id === cur));
+    b.setAttribute('aria-label', t.name + (open ? '' : ', locked until level ' + lv));
+    b.querySelector('.km').textContent = trackOutline(t).km.toFixed(2) + ' km';
+    b.querySelector('.dots').textContent = '●'.repeat(info.diff) + '○'.repeat(5 - info.diff);
+    b.querySelector('.tr').textContent = info.traits;
+    const lb = b.querySelector('.lockb'); lb.hidden = open; lb.textContent = 'LEVEL ' + lv;
+    const st = showStats && trackStatsCache[t.id];
+    b.querySelector('.ts').textContent = showStats && open ? (st ? st.races + ' races · ' + st.wins + ' wins · best ' + fmt(st.best) : 'No races yet') : '';
+    const cv = b.querySelector('canvas'), key = open + '|' + cv.clientWidth;
+    if (cv._k !== key) { cv._k = key; drawTrackPreview(cv, t, { locked: !open }); }
+  }
+  // per-track stats are part of the Level 10 unlock; refresh them at most every 30 s
+  const cloud = window.LOGP_CLOUD;
+  if (conditionsOpen() && cloud && cloud.state.status === 'signed-in' && Date.now() - trackStatsAt > 30000) {
+    trackStatsAt = Date.now();
+    cloud.trackStats().then(st => { trackStatsCache = st; renderTrackGrid(); }).catch(() => { trackStatsAt = 0; });
+  }
+}
 function refreshMenu() {
+  const cond = conditionsOpen();
   document.querySelectorAll('.seg').forEach(seg => {
-    const opt = seg.dataset.opt;
-    seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(String(settings[opt]) === b.dataset.v)));
+    const opt = seg.dataset.opt, locked = !cond && (opt === 'weather' || opt === 'tyre');
+    const val = locked ? (opt === 'weather' ? 'dry' : 'M') : settings[opt];
+    seg.querySelectorAll('button').forEach(b => { b.setAttribute('aria-pressed', String(String(val) === b.dataset.v)); b.disabled = locked && b.dataset.v !== val; });
   });
+  const tn = $('#tierNote'), tier = challengeTier();
+  if (tn) tn.textContent = window.LOGP_CLOUD && window.LOGP_CLOUD.state.status === 'signed-in' ? '· challenge tier ' + tier + (tier ? ' (+' + tier * 5 + '% rewards)' : '') : '';
+  document.querySelectorAll('[data-cond]').forEach(el => { el.textContent = cond ? '' : '· more at level ' + CONDITIONS_LEVEL; });
+  // show the circuit the next Quick Race will use (a locked saved choice falls back to an unlocked one)
+  if (state === 'menu' && (!$('#menu').hidden || !$('#qrSetup').hidden) && TRACK.id !== quickTrack()) { loadTrack(trackById(quickTrack())); startAttract(); }
+  renderTrackGrid();
+  renderGarageSum();
+  const cn = $('#champNote'); if (cn) cn.innerHTML = playerLevel() >= CHAMP_LEVEL ? 'Online season · live races' : 'Online season · <span class="lk">unlocks at level ' + CHAMP_LEVEL + '</span>';
+  const signedIn = window.LOGP_CLOUD && window.LOGP_CLOUD.state.status === 'signed-in';
+  document.querySelectorAll('[data-link]').forEach(b => { b.disabled = !signedIn; b.title = signedIn ? '' : 'Sign in to use this'; });
+  const to = $('#tutOffer'); if (to) to.hidden = !!store.get(TUT_KEY, false);
   $('#fRec').textContent = fmt(getRecord());
   $('#fLen').textContent = (LEN * KMH / 3.6 / 1000).toFixed(2) + ' km';
   $('#fTurns').textContent = CORNERS;
   $('#menuEyebrow').textContent = TRACK.name + ' · ' + TRACK.kind;
   const active = career && career.round < CAL.length;
-  $('#careerBtn').textContent = active ? 'Championship · R' + (career.round + 1) + '/' + CAL.length : 'Championship';
+  $('#careerNote').textContent = active ? 'Round ' + (career.round + 1) + ' of ' + CAL.length + ' · continue your season' : '4-round offline season';
 }
-$('#teamSeg').innerHTML = TEAMS.map(t => '<button type="button" data-v="' + t.id + '"><span class="chip" style="background:' + t.color + '"></span>' + t.name + '</button>').join('');
 document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => {
-  const opt = b.parentElement.dataset.opt; settings[opt] = opt === 'laps' ? Number(b.dataset.v) : b.dataset.v;
+  const opt = b.parentElement.dataset.opt; settings[opt] = opt === 'laps' || opt === 'cars' ? Number(b.dataset.v) : b.dataset.v;
   store.set('logp-settings', settings);
   if (opt === 'track') { loadTrack(trackById(settings.track)); startAttract(); }
   if (opt === 'steer') applySteerSetting(true);
   refreshMenu();
 }));
-$('#startBtn').addEventListener('click', () => { mode = 'quick'; startRace(); });
+$('#startBtn').addEventListener('click', () => { $('#qrSetup').hidden = true; mode = 'quick'; startRace(); });
+$('#qrOpen').addEventListener('click', () => { $('#menu').hidden = true; $('#qrSetup').hidden = false; $('#qrSetup').scrollTop = 0; refreshMenu(); });
+$('#qrBack').addEventListener('click', () => { $('#qrSetup').hidden = true; $('#menu').hidden = false; refreshMenu(); });
+$('#tutBtn').addEventListener('click', () => startTutorial());
+$('#tutOfferGo').addEventListener('click', () => startTutorial());
+$('#tutOfferNo').addEventListener('click', () => { store.set(TUT_KEY, true); refreshMenu(); });
+document.querySelectorAll('[data-link]').forEach(b => b.addEventListener('click', () => {
+  const k = b.dataset.link;
+  if (k === 'garage') openGarage('car'); else if (k === 'levels') openProgress(); else if (k === 'wallet') openSheet('wallet'); else if (k === 'awards') openSheet('awards'); else openChampionship('leaders');
+}));
 $('#careerBtn').addEventListener('click', () => { if (!career) newCareer(); showHub(); });
-$('#againBtn').addEventListener('click', () => { if (mode === 'career') { finishRound(); showHub(); } else startRace(); });
+$('#againBtn').addEventListener('click', () => { if (mode === 'mp') { mpLeaveRace(); return; } if (mode === 'career') { finishRound(); showHub(); } else startRace(); });
 $('#setupBtn').addEventListener('click', quitToMenu);
 $('#resumeBtn').addEventListener('click', () => { recenterTilt(); setPaused(false); });
 $('#tiltZeroBtn').addEventListener('click', recenterTilt);
 $('#tiltFlipBtn').addEventListener('click', () => { settings.tiltInvert = !settings.tiltInvert; store.set('logp-settings', settings); });
-$('#restartBtn').addEventListener('click', () => { $('#pause').hidden = true; session === 'quali' ? startQuali() : session === 'tt' ? startTT() : startRace(); });
+$('#restartBtn').addEventListener('click', () => { $('#pause').hidden = true; mode === 'tutorial' ? startTutorial() : session === 'quali' ? startQuali() : session === 'tt' ? startTT() : startRace(); });
 $('#ttBtn').addEventListener('click', startTT);
 $('#quitBtn').addEventListener('click', quitToMenu);
 $('#pauseBtn').addEventListener('click', () => setPaused(true));
 $('#camBtn').addEventListener('click', toggleCam);
 $('#muteBtn').addEventListener('click', () => { initAudio(); setMuted(!muted); });
 
+/* ---------- player profile (Google sign-in, cloud saves: see cloud.js) ---------- */
+const GOOGLE_G = '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>';
+const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+function syncText(st) {
+  if (st.sync === 'saving') return { t: 'Saving…', err: false };
+  if (st.sync === 'error') return { t: 'Not synced · retrying', err: true };
+  if (st.syncedAt) { const m = Math.floor((Date.now() - st.syncedAt) / 60000); return { t: 'Saved to cloud' + (m < 1 ? '' : ' · ' + m + ' min ago'), err: false }; }
+  return { t: '', err: false };
+}
+function renderProfile(st) {
+  const el = $('#profile'); if (!el) return;
+  if (st.status === 'unavailable') { el.innerHTML = '<div class="who"><span class="nm">Playing offline</span><span class="msg">' + esc(st.error) + '</span></div><button class="pbtn" type="button" data-act="retry">Retry</button>'; return; }
+  if (st.status === 'loading' || st.status === 'signing-in') {
+    el.innerHTML = '<span class="spin" aria-hidden="true"></span><div class="who"><span class="msg">' + (st.status === 'signing-in' ? 'Opening Google sign-in…' : 'Loading your profile…') + '</span></div>';
+    return;
+  }
+  if (st.status === 'signed-in' && st.profile) {
+    const p = st.profile, sy = syncText(st);
+    const av = p.avatar_url ? '<img class="av" src="' + esc(p.avatar_url) + '" alt="" referrerpolicy="no-referrer">' : '<span class="av">' + esc((p.display_name || 'D')[0].toUpperCase()) + '</span>';
+    const li = levelInfo(p, st.levels);
+    el.innerHTML = av + '<div class="who">' + (li ? '<span class="ttl">' + esc(li.title) + '</span>' : '') + '<span class="nm">' + esc(p.display_name) + '</span>' +
+      '<span class="st"><span>LEVEL <b>' + p.level + '</b></span><span>XP <b>' + nf(p.xp) + '</b></span><span class="gold">GOLD <b>' + nf(p.gold) + '</b></span></span>' +
+      (li ? '<span class="xprow"><span class="xpbar"><b style="width:' + (li.frac * 100).toFixed(1) + '%"></b></span><span>' + (li.next ? 'TASKS ' + li.into + '/' + li.need : 'MAX') + '</span></span>' : '') +
+      '<span class="sync' + (sy.err ? ' err' : '') + '">' + esc(sy.t) + '</span></div>' +
+      '<span class="acts" style="grid-template-columns:1fr"><button class="pbtn" type="button" data-act="signout">Sign out</button></span>';
+    return;
+  }
+  const err = st.error ? '<span class="msg err">' + esc(st.error) + '</span>' : '<span class="msg">Sign in to save your progress and continue on any device.</span>';
+  el.innerHTML = '<div class="who"><span class="nm">Guest driver</span>' + err + '</div>' +
+    (st.status === 'error' ? '<button class="pbtn" type="button" data-act="retry">Retry</button>' : '') +
+    '<button class="pbtn google" type="button" data-act="signin">' + GOOGLE_G + 'Sign in with Google</button>';
+}
+// cloud.js calls this after downloading a newer save: re-read everything from storage in place
+// (a page reload would leave a blank screen inside the phone app, where the page is built in)
+window.LOGP_APPLY_SAVE = () => {
+  for (const k of Object.keys(settings)) delete settings[k];
+  Object.assign(settings, SETTINGS_DEFAULT, store.get('logp-settings', {}));
+  career = store.get('logp-career2', null);
+  muted = store.get('logp-muted', false);
+  if (snd) snd.master.gain.value = muted ? 0 : 1;
+  $('#muteBtn').textContent = muted ? 'SOUND OFF' : 'SOUND ON';
+  applySteerSetting(false);
+  if (state === 'menu' && !$('#menu').hidden) { loadTrack(trackById(settings.track)); startAttract(); }
+  refreshMenu();
+};
+function initProfile() {
+  const el = $('#profile'); if (!el) return;
+  const cloud = window.LOGP_CLOUD;
+  if (!cloud) { renderProfile({ status: 'unavailable', error: 'Online features could not load. Check your connection.' }); }
+  else { cloud.onChange(st => { renderProfile(st); if (!$('#menu').hidden) refreshMenu(); }); setInterval(() => { if (!$('#menu').hidden) renderProfile(cloud.state); }, 30000); }
+  el.addEventListener('click', e => {
+    const b = e.target.closest('button[data-act]'); if (!b) return;
+    const act = b.dataset.act;
+    if (act === 'retry') { if (cloud) cloud.retry(); else location.reload(); return; }
+    if (!cloud) return;
+    if (act === 'levels') { openProgress(); return; }
+    if (act === 'wallet') { openSheet('wallet'); return; }
+    if (act === 'awards') { openSheet('awards'); return; }
+    b.disabled = true;
+    if (act === 'signin') cloud.signIn();
+    else if (act === 'signout') cloud.signOut();
+  });
+}
+/* ---------- progression: XP, levels 1-50 (server-checked, see cloud.js / 002_progression.sql) ---------- */
+const nf = n => Number(n || 0).toLocaleString();
+// unlocks the game enforces today (Stage 3: tracks and Level 10 race conditions)
+const UNLOCK_LIVE = Object.fromEntries([...TRACKS.map(t => ['track:' + t.id, true]), ['feature:track_select', true], ['feature:championship', true], ...['lx2', 'lx3', 'lx4', 'lx5'].map(c => ['car:' + c, true]),
+  ...TEAMS.map(t => ['team:' + t.id, true]), ...[1, 2, 3, 4, 5].map(i => ['upgrade:tier' + i, true])]);
+function levelInfo(prof, levels) {
+  if (!prof || !levels || !levels.length) return null;
+  const cur = levels.find(l => l.level === prof.level) || levels[0], next = levels.find(l => l.level === prof.level + 1);
+  let title = 'Rookie';
+  for (const l of levels) if (l.level <= prof.level && l.reward_title) title = l.reward_title;
+  if (!next) return { cur, next: null, into: 0, need: 0, frac: 1, title, tasks: [] };
+  const c = window.LOGP_CLOUD, tk = c && c.state.tasks && c.state.tasks.length && c.state.tasks[0].level === prof.level ? c.state.tasks : [];
+  const into = tk.filter(t => t.done).length, need = tk.length || 3;
+  return { cur, next, into, need, frac: clamp(into / need, 0, 1), title, tasks: tk };
+}
+function rewardLines(l) {
+  const out = [];
+  if (l.reward_gold) out.push({ k: 'gold', t: nf(l.reward_gold) + ' gold' });
+  if (l.reward_title) out.push({ k: 'title', t: 'Title: ' + l.reward_title });
+  // until track locking ships (Stage 3) every track is already open, so say so instead of "coming soon"
+  if (l.unlock_label) out.push({ k: 'unlock', t: (l.unlock_kind === 'track' ? 'Track: ' : '') + l.unlock_label,
+    tag: UNLOCK_LIVE[l.unlock_kind + ':' + l.unlock_id] ? '' : l.unlock_kind === 'track' ? 'open now' : 'coming soon' });
+  return out;
+}
+// race ticket: the server records the start time, then checks the finish against it
+let raceTicket = null, xpView = { s: 'idle' };
+function beginRaceTicket() {
+  raceTicket = null; xpView = { s: 'idle' };
+  const cloud = window.LOGP_CLOUD;
+  if (!cloud || cloud.state.status !== 'signed-in') { xpView = { s: 'guest' }; return; }
+  const cfg = { mode: mode === 'career' ? 'career' : 'quick', track: TRACK.id, laps: LAPS, cars: cars.length,
+    difficulty: mode === 'career' && career ? career.diff : settings.diff, weather: weather.mode };
+  const t = { id: null, error: null, ready: null };
+  t.ready = cloud.startRace(cfg).then(id => { t.id = id; }).catch(e => { t.error = e.message; });
+  raceTicket = t;
+}
+// the classification is final once no car still running could beat the player's time (penalties included)
+const classificationFinal = () => cars.every(c => c.dnf || c.finished) || (simT - raceT0) > player.finishTime + 2;
+function submitRaceResult() {
+  if (!raceTicket) { renderXpCard(); return; }
+  const t = raceTicket;
+  if (!t.result && !classificationFinal()) {
+    xpView = { s: 'waiting' }; renderXpCard();
+    clearTimeout(t.wait); t.wait = setTimeout(() => { if (t === raceTicket) submitRaceResult(); }, 500);
+    return;
+  }
+  const res = t.result || { position: standings().indexOf(player) + 1, raceTime: player.finishTime, bestLap: player.best, fastestLap: fastestCar === player, penalties: player.penalty };
+  t.result = res;
+  xpView = { s: 'saving' }; renderXpCard();
+  t.ready.then(() => {
+    if (t !== raceTicket) return;
+    if (!t.id) { xpView = { s: 'error', msg: t.error || 'The race could not be registered with the server.', retry: false }; renderXpCard(); return; }
+    return window.LOGP_CLOUD.finishRace(t.id, res).then(data => {
+      if (t !== raceTicket) return;
+      t.done = true; xpView = { s: 'done', data }; renderXpCard();
+      if (data.level_after > data.level_before || (data.achievements || []).length) queueLevelUp(data);
+    }).catch(e => { if (t === raceTicket) { xpView = { s: 'error', msg: e.message, retry: !/already saved|could not be verified|too quickly|Invalid/i.test(e.message) }; renderXpCard(); } });
+  });
+}
+function renderXpCard() {
+  const el = $('#resXp'); if (!el) return;
+  const v = xpView;
+  el.hidden = session !== 'race' || v.s === 'idle';
+  if (el.hidden) return;
+  if (v.s === 'guest') { el.innerHTML = '<div class="msg">Sign in with Google on the main menu to earn XP and level up from your races.</div>'; return; }
+  if (v.s === 'waiting') { el.innerHTML = '<div class="msg"><span class="spin" aria-hidden="true"></span>Waiting for the final classification (penalties can still change positions)…</div>'; return; }
+  if (v.s === 'saving') { el.innerHTML = '<div class="msg"><span class="spin" aria-hidden="true"></span>Checking your result with the server…</div>'; return; }
+  if (v.s === 'error') { el.innerHTML = '<div class="msg err">No XP for this race: ' + esc(v.msg) + (v.retry ? ' <button class="pbtn" type="button" id="xpRetry">Try again</button>' : '') + '</div>'; const b = $('#xpRetry'); if (b) b.onclick = submitRaceResult; return; }
+  const d = v.data, cloud = window.LOGP_CLOUD, li = levelInfo(cloud.state.profile, cloud.state.levels);
+  const lvUp = d.level_after > d.level_before, tDone = d.tasks_done || 0, tTot = d.tasks_total || 3;
+  el.innerHTML = '<div class="xp-top"><span class="xp-big">' + (lvUp ? 'Level ' + d.level_after + '!' : 'Tasks ' + tDone + '/' + tTot) + '</span><span class="xp-lv">' +
+    (lvUp ? 'All level ' + d.level_before + ' tasks done' : 'LEVEL ' + d.level_after + ' · finish all ' + tTot + ' tasks to reach level ' + (d.level_after + 1)) + '</span></div>' +
+    '<div class="xpbar"><b style="width:0"></b></div>' + (d.tasks && d.tasks.length ? taskList(d.tasks) : '') +
+    '<span class="xp-lv">+' + nf(d.xp) + ' XP</span>' +
+    '<ul>' + d.breakdown.map(p => '<li><span>' + esc(p.label) + '</span><b>+' + nf(p.xp) + '</b></li>').join('') +
+    (d.gold_breakdown || (d.gold ? [{ label: 'Level rewards', gold: d.gold }] : [])).map(g => '<li><span>' + esc(g.label) + '</span><b style="color:#ffcf4a">+' + nf(g.gold) + ' gold</b></li>').join('') + '</ul>' +
+    (d.challenge_after != null && d.challenge_after !== d.challenge_before ? '<div class="msg">' + (d.challenge_after > d.challenge_before ? '▲ Challenge tier ' + d.challenge_after + ': your rivals get faster, rewards +' + d.challenge_after * 5 + '%' : '▼ Challenge tier ' + d.challenge_after + ': the rivals ease off a little') + '</div>' : '') +
+    ((d.achievements || []).length ? '<div class="msg">★ ' + d.achievements.map(a => esc(a.name)).join(' · ') + '</div>' : '');
+  const bar = el.querySelector('.xpbar b');
+  requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.width = ((lvUp ? 1 : tDone / tTot) * 100).toFixed(1) + '%'; }));
+}
+function taskList(list) {
+  return '<ul class="tasks">' + list.map(t => '<li class="' + (t.done ? 'done' : '') + (t.advanced ? ' adv' : '') + '"><span class="tk">' + (t.done ? '✓' : '○') + '</span><span>' + esc(t.description) + '</span>' +
+    '<span class="tp">' + (t.done ? 'Done' : t.progress + '/' + t.count) + '</span></li>').join('') + '</ul>';
+}
+// level-up celebration, one level at a time
+const luQueue = [];
+function queueLevelUp(data) {
+  for (const r of data.rewards) luQueue.push(r);
+  for (const a of data.achievements || []) luQueue.push(Object.assign({ type: 'ach' }, a));
+  if ($('#levelUp').hidden) setTimeout(showNextLevelUp, $('#results').hidden ? 2600 : 600);
+}
+function showNextLevelUp() {
+  const r = luQueue.shift(); if (!r) { $('#levelUp').hidden = true; return; }
+  const champUnlock = r.unlock_kind === 'feature' && r.unlock_id === 'championship';
+  $('#luEyebrow').textContent = r.type === 'ach' ? 'Achievement unlocked' : champUnlock ? 'Championship unlocked' : 'Level up';
+  $('#levelUp').classList.toggle('ach', r.type === 'ach');
+  $('#levelUp').classList.toggle('champ', champUnlock);
+  $('#luChamp').hidden = !champUnlock;
+  if (r.type === 'ach') {
+    $('#luLevel').textContent = '★'; $('#luTitle').textContent = r.name; $('#luTrack').hidden = true;
+    $('#luRewards').innerHTML = '<li><span>' + esc(r.description) + '</span></li>' + (r.gold ? '<li><span>' + nf(r.gold) + ' gold</span><b>added</b></li>' : '');
+    const el = $('#levelUp'); el.hidden = false;
+    const card = el.querySelector('.lu-card'); card.style.animation = 'none'; void card.offsetWidth; card.style.animation = '';
+    beep(1040, 0.1); setTimeout(() => beep(1560, 0.16), 120); buzz('medium'); $('#luOk').focus();
+    return;
+  }
+  const levels = (window.LOGP_CLOUD && window.LOGP_CLOUD.state.levels) || [];
+  const row = levels.find(l => l.level === r.level) || { level: r.level, reward_gold: r.gold, reward_title: r.title, unlock_kind: r.unlock_kind, unlock_id: r.unlock_id, unlock_label: r.unlock_label };
+  $('#luLevel').textContent = r.level;
+  const newTrack = r.unlock_kind === 'track' && TRACKS.find(t => t.id === r.unlock_id);
+  $('#luTitle').textContent = newTrack ? 'New track unlocked · ' + newTrack.name : r.title ? 'New title · ' + r.title : 'Level ' + r.level + ' reached';
+  const lt = $('#luTrack'); lt.hidden = !newTrack;
+  if (newTrack) requestAnimationFrame(() => drawTrackPreview(lt, newTrack, { color: '#ffcf4a' }));
+  $('#luRewards').innerHTML = rewardLines(row).map(x => '<li><span>' + esc(x.t) + '</span>' + (x.tag ? '<span class="soon">' + x.tag + '</span>' : x.k === 'gold' ? '<b>added</b>' : '') + '</li>').join('') || '<li><span>Keep racing for the next reward</span></li>';
+  const el = $('#levelUp'); el.hidden = false;
+  const card = el.querySelector('.lu-card'); card.style.animation = 'none'; void card.offsetWidth; card.style.animation = '';
+  beep(880, 0.12); setTimeout(() => beep(1320, 0.18), 140); buzz('heavy');
+  $('#luOk').focus();
+}
+// levels 1-50 screen
+async function openProgress() {
+  const cloud = window.LOGP_CLOUD; if (!cloud || cloud.state.status !== 'signed-in') return;
+  $('#menu').hidden = true; $('#progress').hidden = false;
+  const body = $('#progBody');
+  body.innerHTML = '<div class="msg" style="display:flex;gap:10px;align-items:center;color:var(--muted)"><span class="spin"></span>Loading your progression…</div>';
+  try {
+    await cloud.refreshTasks();
+    const [levels, hist, all] = await Promise.all([cloud.levels(), cloud.progressHistory(), cloud.allTasks()]);
+    const prof = cloud.state.profile, li = levelInfo(prof, levels);
+    const byLevel = {}; for (const t of all) (byLevel[t.level] = byLevel[t.level] || []).push(t.description);
+    $('#progTitle').textContent = 'Level ' + prof.level;
+    $('#progSub').textContent = li.title + ' · ' + nf(prof.gold) + ' gold · ' + nf(prof.xp) + ' XP';
+    $('#progBar').style.width = (li.frac * 100).toFixed(1) + '%';
+    $('#progNote').textContent = li.next ? li.into + ' of ' + li.need + ' tasks done · complete all of them to reach level ' + li.next.level : 'Maximum level reached';
+    const miles = levels.filter(l => l.level > prof.level && (l.reward_title || l.unlock_label)).slice(0, 3);
+    const tile = l => {
+      const cls = l.level < prof.level ? 'done' : l.level === prof.level ? 'cur' : '';
+      return '<div class="lv ' + cls + (l.unlock_label ? ' big' : '') + '"><span class="n">' + l.level + '</span>' + (byLevel[l.level - 1] ? '<span class="lvt">' + byLevel[l.level - 1].map(esc).join('<br>') + '</span>' : '<span class="lvt">Starting level</span>') +
+        rewardLines(l).map(x => x.k === 'gold' ? '<span class="g">+' + esc(x.t) + '</span>' : '<span class="u">' + esc(x.t) + '</span>' + (x.tag ? '<span class="soon">' + x.tag + '</span>' : '')).join('') + '</div>';
+    };
+    const trackName = id => (TRACKS.find(t => t.id === id) || { name: id }).name;
+    body.innerHTML =
+      (li.tasks.length ? '<h3>Your level ' + prof.level + ' tasks</h3>' + taskList(li.tasks) : '') +
+      (miles.length ? '<h3>Upcoming milestones</h3><div class="miles">' + miles.map(l => '<div class="mile"><b>Level ' + l.level + '</b><span>' + rewardLines(l).filter(x => x.k !== 'gold').map(x => esc(x.t)).join(' · ') + '</span><span>' + (l.level - prof.level) + (l.level - prof.level === 1 ? ' level' : ' levels') + ' away</span></div>').join('') + '</div>' : '') +
+      '<h3>All levels</h3><div class="lvgrid">' + levels.map(tile).join('') + '</div>' +
+      '<div class="hist"><div><h3>Level history</h3><ul>' + hist.levels.map(h => '<li><span>Level ' + h.level + '</span><span>' + new Date(h.reached_at).toLocaleDateString() + '</span></li>').join('') + '</ul></div>' +
+      '<div><h3>Recent races</h3><ul>' + (hist.races.length ? hist.races.map(r => '<li><span>P' + r.position + ' · ' + esc(trackName(r.track_id)) + ' · ' + r.laps + ' laps</span><span>+' + nf(r.xp_awarded) + ' XP</span></li>').join('') : '<li><span>No races yet</span><span></span></li>') + '</ul></div></div>';
+    const cur = body.querySelector('.lv.cur'); if (cur) cur.scrollIntoView({ block: 'center' });
+    $('#progress').scrollTop = 0;
+  } catch (e) {
+    body.innerHTML = '<div class="msg err" style="color:#ff8a8a">' + esc(e.message) + '</div>';
+  }
+}
+const TX_KIND = { level_reward: 'Level reward', race_reward: 'Race reward', purchase: 'Purchase', achievement: 'Achievement', championship: 'Championship', adjustment: 'Adjustment' };
+async function openSheet(kind) {
+  const cloud = window.LOGP_CLOUD; if (!cloud || cloud.state.status !== 'signed-in') return;
+  $('#menu').hidden = true; $('#sheet').hidden = false; $('#sheet').scrollTop = 0;
+  const body = $('#sheetBody'), prof = cloud.state.profile;
+  $('#sheetEyebrow').textContent = kind === 'wallet' ? 'Wallet' : 'Achievements';
+  $('#sheetTitle').textContent = kind === 'wallet' ? nf(prof.gold) + ' gold' : 'Achievements';
+  $('#sheetSub').textContent = kind === 'wallet' ? 'Earned from races, levels and achievements. Gold buys car upgrades in the garage (next update).' : 'Each one pays out gold once.';
+  body.innerHTML = '<div class="msg" style="display:flex;gap:10px;align-items:center;color:var(--muted)"><span class="spin"></span>Loading…</div>';
+  try {
+    if (kind === 'wallet') {
+      const txs = await cloud.wallet(100);
+      body.innerHTML = '<h3>Transaction history</h3>' + (txs.length ? '<ul class="txs">' + txs.map(t =>
+        '<li><span>' + esc(t.note || TX_KIND[t.kind] || t.kind) + '</span><span class="amt ' + (t.amount >= 0 ? 'plus' : 'minus') + '">' + (t.amount >= 0 ? '+' : '−') + nf(Math.abs(t.amount)) + '</span>' +
+        '<span class="meta">' + esc(TX_KIND[t.kind] || t.kind) + ' · ' + new Date(t.created_at).toLocaleString() + '</span><span class="bal">balance ' + nf(t.balance_after) + '</span></li>').join('') + '</ul>'
+        : '<p class="sub">No gold yet. Finish a race to earn your first coins.</p>');
+    } else {
+      const list = await cloud.achievements(), got = list.filter(a => a.unlocked_at).length;
+      $('#sheetTitle').textContent = got + ' / ' + list.length;
+      body.innerHTML = '<div class="achs">' + list.map(a => '<div class="ach' + (a.unlocked_at ? ' got' : '') + '"><b>' + esc(a.name) + '</b><span>' + esc(a.description) + '</span>' +
+        '<span class="rw">' + (a.unlocked_at ? 'Unlocked ' + new Date(a.unlocked_at).toLocaleDateString() + ' · ' : '') + '+' + nf(a.reward_gold) + ' gold</span></div>').join('') + '</div>';
+    }
+  } catch (e) {
+    body.innerHTML = '<div class="msg" style="color:#ff8a8a">' + esc(e.message) + '</div>';
+  }
+}
+function closeSheet() { $('#sheet').hidden = true; $('#menu').hidden = false; }
+/* ---------- garage (Stage 5): cars, upgrades and teams bought with gold on the server ---------- */
+const BASE_CAR = { top_speed: 1, accel: 1, braking: 1, handling: 1, downforce: 1, tyre_wear: 1 };
+// multipliers for a car with its upgrades (same numbers the server's catalogue describes)
+function loadoutStats(g, carId, ups) {
+  const car = (g && g.cars && g.cars.find(c => c.id === carId)) || BASE_CAR, u = ups || {};
+  return {
+    vmax: car.top_speed * (1 + 0.008 * (u.engine || 0) + 0.015 * (u.top_speed || 0)),
+    acc: car.accel * (1 + 0.02 * (u.engine || 0) + 0.04 * (u.acceleration || 0)),
+    brk: car.braking * (1 + 0.05 * (u.braking || 0)),
+    turn: car.handling * (1 + 0.03 * (u.handling || 0)),
+    aero: car.downforce * (1 + 0.02 * (u.aero || 0)),
+    wear: car.tyre_wear * Math.pow(0.92, u.tyres || 0),
+  };
+}
+// Quick Race: drive the car selected in the garage (career mode keeps its own upgrade credits)
+function applyGarage(c) {
+  const g = cloudGarage(); if (!g || (mode !== 'quick' && mode !== 'mp')) return;
+  const st = loadoutStats(g, g.selected_car, g.owned[g.selected_car]);
+  c.vmax = VMAX * st.vmax; c.accMul = st.acc; c.brkMul = st.brk; c.turnMul = st.turn; c.aero = st.aero; c.wearMul = st.wear;
+}
+const STAT_ROWS = [
+  { k: 'vmax', label: 'Top speed', fmt: m => Math.round(VMAX * KMH * m) + ' km/h' },
+  { k: 'acc', label: 'Acceleration', fmt: m => Math.round(m * 100) },
+  { k: 'brk', label: 'Braking', fmt: m => Math.round(m * 100) },
+  { k: 'turn', label: 'Handling', fmt: m => Math.round(m * 100) },
+  { k: 'aero', label: 'Downforce', fmt: m => Math.round(m * 100) },
+  { k: 'wear', label: 'Tyre life', fmt: m => Math.round(100 / m), inv: true },
+];
+// fictional team emblems, drawn as simple shapes in the team colours
+function teamEmblem(t, size) {
+  const shapes = {
+    tidewater: '<path d="M8 30c6-6 10-6 16 0s10 6 16 0M8 22c6-6 10-6 16 0s10 6 16 0" fill="none" stroke="ALT" stroke-width="3.5" stroke-linecap="round"/>',
+    aurora: '<path d="M24 8l4 12 12 4-12 4-4 12-4-12-12-4 12-4z" fill="ALT"/>',
+    halcyon: '<path d="M24 7l15 17-15 17L9 24z" fill="none" stroke="ALT" stroke-width="3.5"/><path d="M24 16l7 8-7 8-7-8z" fill="ALT"/>',
+    meridian: '<circle cx="24" cy="24" r="13" fill="none" stroke="ALT" stroke-width="3.5"/><path d="M24 8v32" stroke="ALT" stroke-width="3.5"/>',
+    vortex: '<path d="M24 24m-3 0a3 3 0 1 1 6 0a8 8 0 1 1-16 0a13 13 0 1 1 26 0" fill="none" stroke="ALT" stroke-width="3.5" stroke-linecap="round"/>',
+    corsa: '<path d="M24 8l13 5v10c0 9-6 14-13 17-7-3-13-8-13-17V13z" fill="ALT"/><path d="M18 22h12" stroke="COL" stroke-width="3"/>',
+    kestrel: '<path d="M8 30l16-14 16 14-6 0-10-8-10 8z" fill="ALT"/><path d="M14 22l10-8 10 8" fill="none" stroke="ALT" stroke-width="3"/>',
+  };
+  const body = (shapes[t.id] || '<circle cx="24" cy="24" r="10" fill="ALT"/>').replace(/ALT/g, t.alt).replace(/COL/g, t.color);
+  return '<svg class="em" viewBox="0 0 48 48" width="' + (size || 40) + '" height="' + (size || 40) + '" aria-hidden="true"><rect x="2" y="2" width="44" height="44" rx="10" fill="' + t.color + '"/>' + body + '</svg>';
+}
+function renderGarageSum() {
+  const el = $('#garageSum'); if (!el) return;
+  const g = cloudGarage(), team = teamById(myTeamId());
+  const car = g && g.cars ? g.cars.find(c => c.id === g.selected_car) : null;
+  el.innerHTML = teamEmblem(team, 40) + '<span class="gt"><b>' + esc(team.name) + '</b><span>' + (car ? esc(car.name) : window.LOGP_CLOUD && window.LOGP_CLOUD.state.status === 'signed-in' ? 'LX-1 Rookie · garage not available right now' : 'LX-1 Rookie · sign in to unlock cars, teams and upgrades') + '</span></span>' +
+    (g ? '<button class="pbtn" type="button" id="openGarage">Garage</button>' : '');
+  const b = $('#openGarage'); if (b) b.onclick = () => openGarage('car');
+}
+let garTab = 'car', garPreview = null, garBusy = false;
+async function openGarage(tab) {
+  const cloud = window.LOGP_CLOUD; if (!cloud || cloud.state.status !== 'signed-in') return;
+  garTab = tab || garTab; garPreview = null;
+  $('#menu').hidden = true; $('#garage').hidden = false; $('#garage').scrollTop = 0;
+  setGarMsg('Loading your garage…');
+  try { await cloud.garage(); setGarMsg(''); } catch (e) { setGarMsg(e.message, 'err'); }
+  renderGarage();
+}
+function closeGarage() { $('#garage').hidden = true; $('#menu').hidden = false; refreshMenu(); }
+function setGarMsg(t, cls) { const m = $('#garMsg'); m.textContent = t || ''; m.className = 'gar-msg' + (cls ? ' ' + cls : ''); }
+function renderGarStats(g) {
+  const now = loadoutStats(g, g.selected_car, g.owned[g.selected_car]);
+  const after = garPreview ? loadoutStats(g, garPreview.car, garPreview.ups) : null;
+  const bar = (r, m) => clamp(((r.inv ? 1 / m : m) - 0.85) / 0.55, 0.04, 1) * 100;
+  $('#garStats').innerHTML = (after ? '<span class="lbl">' + esc(garPreview.label) + '</span>' : '<span class="lbl">Current car</span>') + STAT_ROWS.map(r => {
+    const a = now[r.k], b = after ? after[r.k] : a, better = r.inv ? b < a : b > a, same = Math.abs(a - b) < 1e-6;
+    return '<div class="gstat"><span>' + r.label + '</span><span class="gb">' +
+      (after && better ? '<i class="after" style="width:' + bar(r, b).toFixed(1) + '%"></i>' : '') +
+      '<i class="now" style="width:' + bar(r, after && !better ? b : a).toFixed(1) + '%"></i></span>' +
+      '<span class="gv">' + r.fmt(a) + (after && !same ? ' → <em class="' + (better ? '' : 'down') + '">' + r.fmt(b) + '</em>' : '') + '</span></div>';
+  }).join('');
+}
+function renderGarage() {
+  const g = cloudGarage(); if (!g || !g.cars) { $('#garBody').innerHTML = ''; $('#garStats').innerHTML = ''; return; }
+  const car = g.cars.find(c => c.id === g.selected_car) || g.cars[0], team = teamById(g.selected_team);
+  $('#garTitle').textContent = car.name;
+  $('#garSub').textContent = team.name + ' · ' + nf(g.gold) + ' gold · player level ' + g.level;
+  document.querySelectorAll('.gtabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === garTab)));
+  renderGarStats(g);
+  const body = $('#garBody');
+  if (garTab === 'car') {
+    body.innerHTML = '<div class="gcars">' + g.cars.map(c => {
+      const own = !!g.owned[c.id], cur = c.id === g.selected_car, locked = g.level < c.unlock_level;
+      const btn = cur ? '<button class="gbtn alt" type="button" disabled>Driving</button>'
+        : own ? '<button class="gbtn" type="button" data-act="select-car" data-id="' + c.id + '">Drive this car</button>'
+        : locked ? '<button class="gbtn" type="button" disabled>Level ' + c.unlock_level + '</button>'
+        : '<button class="gbtn" type="button" data-act="buy-car" data-id="' + c.id + '"' + (g.gold < c.price_gold ? ' disabled' : '') + '>Buy · ' + nf(c.price_gold) + ' gold</button>';
+      return '<div class="gcar" data-preview-car="' + c.id + '"' + (cur ? ' aria-current="true"' : '') + ' tabindex="0"><b>' + esc(c.name) + '</b><span>' + esc(c.description) + '</span><span>' +
+        (own ? 'Owned' : locked ? 'Unlocks at level ' + c.unlock_level : nf(c.price_gold) + ' gold') + '</span>' + btn + '</div>';
+    }).join('') + '</div>';
+  } else if (garTab === 'upg') {
+    const ups = g.owned[car.id] || {}, tierLv = t => (g.tiers.find(x => x.tier === t) || {}).unlock_level;
+    body.innerHTML = '<div class="gupg">' + g.kinds.map(k => {
+      const lv = ups[k.id] || 0, next = lv + 1, need = tierLv(next), cost = next <= 5 ? Math.round(k.base_cost * Math.pow(next, 1.6) / 10) * 10 : 0;
+      const btn = lv >= 5 ? '<button class="gbtn alt" type="button" disabled>Maxed</button>'
+        : g.level < need ? '<button class="gbtn" type="button" disabled>Level ' + need + '</button>'
+        : '<button class="gbtn" type="button" data-act="buy-upg" data-id="' + k.id + '"' + (g.gold < cost ? ' disabled' : '') + '>Upgrade · ' + nf(cost) + '</button>';
+      return '<div class="gu" data-preview-upg="' + k.id + '" tabindex="0"><b>' + esc(k.name) + '</b>' + btn + '<span class="eff">' + esc(k.effect) + '</span><span class="pips" aria-label="Level ' + lv + ' of 5">' + [1, 2, 3, 4, 5].map(i => '<i class="' + (i <= lv ? 'on' : '') + '"></i>').join('') + '</span></div>';
+    }).join('') + '</div>';
+  } else {
+    body.innerHTML = '<div class="gteams">' + g.teams.map(t0 => {
+      const t = Object.assign({}, teamById(t0.id), t0), cur = t.id === g.selected_team, locked = g.level < t.unlock_level;
+      const btn = cur ? '<button class="gbtn alt" type="button" disabled>Your team</button>'
+        : locked ? '<button class="gbtn" type="button" disabled>Level ' + t.unlock_level + '</button>'
+        : '<button class="gbtn" type="button" data-act="select-team" data-id="' + t.id + '">Join ' + esc(t.name) + '</button>';
+      return '<div class="gteam"' + (cur ? ' aria-current="true"' : '') + '>' + teamEmblem(t, 48) + '<b>' + esc(t.name) + '</b><span class="sw"><i style="background:' + t.color + '"></i><i style="background:' + t.alt + '"></i></span><span>' +
+        (locked ? 'Unlocks at level ' + t.unlock_level : 'Your livery and team-mate in Quick Race') + '</span>' + btn + '</div>';
+    }).join('') + '</div>';
+  }
+}
+function garageInit() {
+  $('#garClose').addEventListener('click', closeGarage);
+  document.querySelectorAll('.gtabs button').forEach(b => b.addEventListener('click', () => { garTab = b.dataset.tab; garPreview = null; setGarMsg(''); renderGarage(); }));
+  const body = $('#garBody');
+  const preview = e => {
+    const g = cloudGarage(); if (!g) return;
+    const pc = e.target.closest('[data-preview-car]'), pu = e.target.closest('[data-preview-upg]');
+    if (pc && pc.dataset.previewCar !== g.selected_car) { const id = pc.dataset.previewCar, c = g.cars.find(x => x.id === id); garPreview = { car: id, ups: g.owned[id] || {}, label: 'Compared with ' + c.name }; }
+    else if (pu) { const ups = Object.assign({}, g.owned[g.selected_car]), k = pu.dataset.previewUpg; if ((ups[k] || 0) >= 5) return; ups[k] = (ups[k] || 0) + 1; garPreview = { car: g.selected_car, ups, label: 'After this upgrade' }; }
+    else return;
+    renderGarStats(g);
+  };
+  body.addEventListener('pointerover', preview); body.addEventListener('focusin', preview);
+  body.addEventListener('pointerleave', () => { garPreview = null; const g = cloudGarage(); if (g) renderGarStats(g); });
+  body.addEventListener('click', async e => {
+    const b = e.target.closest('button[data-act]'); if (!b || garBusy) return;
+    const cloud = window.LOGP_CLOUD, g = cloudGarage(), id = b.dataset.id, act = b.dataset.act;
+    garBusy = true; b.disabled = true; setGarMsg('Saving…');
+    try {
+      if (act === 'buy-car') { await cloud.buyCar(id); setGarMsg('Bought ' + g.cars.find(c => c.id === id).name + '. It is now your race car.', 'ok'); }
+      else if (act === 'select-car') { await cloud.selectLoadout(id, g.selected_team); setGarMsg('You will race the ' + g.cars.find(c => c.id === id).name + '.', 'ok'); }
+      else if (act === 'buy-upg') { await cloud.buyUpgrade(g.selected_car, id); setGarMsg(g.kinds.find(k => k.id === id).name + ' upgraded.', 'ok'); beep(1100, 0.08); }
+      else if (act === 'select-team') { await cloud.selectLoadout(g.selected_car, id); setGarMsg('Welcome to ' + teamById(id).name + '.', 'ok'); }
+    } catch (err) { setGarMsg(err.message, 'err'); }
+    garBusy = false; garPreview = null; renderGarage();
+  });
+}
+/* ---------- championship (Stage 6): unlocks at level 50; live races arrive with the race server (Stage 7) ---------- */
+const CHAMP_LEVEL = 50;
+let chTab = 'overview', chData = null, chPick = null;
+const fmtDate = d => new Date(d).toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+function avatarCell(a, name) { return a ? '<img src="' + esc(a) + '" alt="" referrerpolicy="no-referrer">' : '<span class="ini">' + esc((name || '?')[0].toUpperCase()) + '</span>'; }
+async function openChampionship(tab) {
+  const cloud = window.LOGP_CLOUD;
+  chTab = tab || chTab;
+  $('#menu').hidden = true; $('#champ').hidden = false; $('#champ').scrollTop = 0;
+  if (!cloud || cloud.state.status !== 'signed-in') {
+    $('#chTitle').textContent = 'Championship'; $('#chSub').textContent = 'Sign in with Google on the main menu to follow the Championship and work towards level 50.';
+    $('#chLock').hidden = true; $('#chBody').innerHTML = ''; setChMsg(''); return;
+  }
+  setChMsg('Loading the Championship…');
+  try { chData = await cloud.championship(); setChMsg(''); } catch (e) { setChMsg(e.message, 'err'); return; }
+  renderChampionship();
+}
+function closeChampionship() { $('#champ').hidden = true; $('#menu').hidden = false; refreshMenu(); }
+function setChMsg(t, cls) { const m = $('#chMsg'); m.textContent = t || ''; m.className = 'gar-msg' + (cls ? ' ' + cls : ''); }
+async function renderChampionship() {
+  const d = chData; if (!d) return;
+  const season = d.season || {}, entry = d.entry, unlocked = d.unlocked;
+  $('#chTitle').textContent = season.name || 'Championship';
+  $('#chSub').textContent = season.starts_at ? fmtDate(season.starts_at) + ' – ' + fmtDate(season.ends_at) + ' · ' + d.rounds.length + ' rounds · ' + nf(d.entrants) + (d.entrants === 1 ? ' driver' : ' drivers') + ' entered' : 'No season scheduled yet';
+  const lock = $('#chLock'); lock.hidden = unlocked;
+  if (!unlocked) {
+    const frac = clamp((d.level - 1) / (d.unlock_level - 1), 0, 1);
+    lock.innerHTML = '<b>Unlocks at level ' + d.unlock_level + '</b><span>You are level ' + d.level + '. Complete each level\'s 3 tasks to climb: ' + (d.unlock_level - d.level) + ' levels to go.</span><div class="xpbar big"><b style="width:' + (frac * 100).toFixed(1) + '%"></b></div>';
+  }
+  document.querySelectorAll('[data-ctab]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.ctab === chTab)));
+  const body = $('#chBody');
+  const tName = id => (TRACKS.find(t => t.id === id) || { name: id }).name;
+  if (chTab === 'overview') {
+    const g = cloudGarage(), teams = (g && g.teams) || TEAMS.map(t => ({ id: t.id }));
+    chPick = chPick || (entry && entry.team_id) || (g && g.selected_team) || 'tidewater';
+    const started = season.starts_at && new Date(d.now) >= new Date(season.starts_at), locked = entry && started;
+    body.innerHTML = '<div class="ch-grid"><div class="ch-box"><h3>How it works</h3><ul>' +
+      '<li>Real races against other players, one round a week on every circuit.</li>' +
+      '<li>Points for the top 10, F1 style. Your points also count for your team.</li>' +
+      '<li>Driver standings, team standings and a global leaderboard.</li>' +
+      '<li>Live multiplayer races open when the race server goes live (next update). Until then rounds stay unraced.</li></ul>' +
+      '<h3>Points</h3><div class="ch-pts">' + d.points.map(p => '<span>P' + p.position + ' · ' + p.points + '</span>').join('') + '</div></div>' +
+      '<div class="ch-box"><h3>' + (entry ? 'Your entry' : 'Enter the season') + '</h3>' +
+      (entry ? '<span>You race for <b>' + esc(teamById(entry.team_id).name) + '</b>' + (locked ? '. Teams are locked for this season.' : '. You can switch team until the season starts.') + '</span>' : '<span>' + (unlocked ? 'Pick the team you will drive for this season.' : 'Reach level 50 to enter. You can look around until then.') + '</span>') +
+      '<div class="ch-teams" role="group" aria-label="Team">' + teams.map(t0 => { const t = teamById(t0.id); return '<button type="button" data-team="' + t.id + '" aria-pressed="' + (t.id === chPick) + '"' + (!unlocked || locked ? ' disabled' : '') + '>' + teamEmblem(t, 34) + esc(t.name) + '</button>'; }).join('') + '</div>' +
+      '<div class="ch-box mp-box" id="mpBox"></div>' +
+      '<button class="go" type="button" id="chJoin"' + (!unlocked || locked ? ' disabled' : '') + '>' + (!unlocked ? 'Unlocks at level ' + d.unlock_level : entry ? 'Switch to ' + esc(teamById(chPick).name) : 'Enter for ' + esc(teamById(chPick).name)) + '</button></div></div>';
+    body.querySelectorAll('[data-team]').forEach(b => b.onclick = () => { chPick = b.dataset.team; renderChampionship(); });
+    renderMpBox(); if (mp.status === 'idle' || mp.status === 'closed') mpConnect();
+    const jb = $('#chJoin'); if (jb && !jb.disabled) jb.onclick = async () => {
+      jb.disabled = true; setChMsg('Saving your entry…');
+      try { chData = await window.LOGP_CLOUD.joinChampionship(chPick); setChMsg('You are entered for ' + teamById(chPick).name + '.', 'ok'); } catch (e) { setChMsg(e.message, 'err'); }
+      renderChampionship();
+    };
+  } else if (chTab === 'schedule') {
+    body.innerHTML = '<div class="rounds">' + d.rounds.map(r => '<div class="rnd"><canvas data-track="' + r.track_id + '" aria-hidden="true"></canvas><b>Round ' + r.round + ' · ' + esc(tName(r.track_id)) + '</b><span>' + r.laps + ' laps · ' + fmtDate(r.opens_at) + ' – ' + fmtDate(r.closes_at) + '</span><span class="st ' + r.status + '">' + (r.status === 'open' ? 'Open now' : r.status) + '</span></div>').join('') + '</div>';
+    requestAnimationFrame(() => body.querySelectorAll('canvas[data-track]').forEach(cv => drawTrackPreview(cv, trackById(cv.dataset.track))));
+  } else if (chTab === 'standings') {
+    body.innerHTML = '<div class="msg" style="display:flex;gap:10px;align-items:center;color:var(--muted)"><span class="spin"></span>Loading standings…</div>';
+    try {
+      const st = await window.LOGP_CLOUD.standings(season.id);
+      if (chTab !== 'standings') return;
+      body.innerHTML = '<div class="ch-grid"><div><h3>Drivers</h3>' + (st.drivers.length ? '<table class="ldr"><thead><tr><th>Pos</th><th>Driver</th><th>Team</th><th>Wins</th><th>Pts</th></tr></thead><tbody>' +
+        st.drivers.map((x, i) => '<tr class="' + (x.me ? 'me' : '') + '"><td class="n">' + (i + 1) + '</td><td>' + avatarCell(x.avatar, x.name) + esc(x.name) + '</td><td>' + esc(teamById(x.team).name) + '</td><td class="n">' + x.wins + '</td><td class="n">' + x.points + '</td></tr>').join('') + '</tbody></table>'
+        : '<p class="sub">No drivers have entered yet.</p>') + '</div>' +
+        '<div><h3>Teams</h3><table class="ldr"><thead><tr><th>Pos</th><th>Team</th><th>Drivers</th><th>Pts</th></tr></thead><tbody>' +
+        st.teams.map((x, i) => '<tr><td class="n">' + (i + 1) + '</td><td>' + teamEmblem(teamById(x.team), 22) + ' ' + esc(x.name) + '</td><td class="n">' + x.drivers + '</td><td class="n">' + x.points + '</td></tr>').join('') + '</tbody></table></div></div>';
+    } catch (e) { body.innerHTML = '<div class="msg" style="color:#ff8a8a">' + esc(e.message) + '</div>'; }
+  } else {
+    body.innerHTML = '<div class="msg" style="display:flex;gap:10px;align-items:center;color:var(--muted)"><span class="spin"></span>Loading the leaderboard…</div>';
+    try {
+      const lb = await window.LOGP_CLOUD.leaderboard();
+      if (chTab !== 'leaders') return;
+      body.innerHTML = (lb.me ? '<p class="sub">You are ranked <b>#' + lb.me.rank + '</b> of ' + nf(lb.players) + ' drivers.</p>' : '') +
+        '<table class="ldr"><thead><tr><th>Rank</th><th>Driver</th><th>Level</th><th>XP</th><th>Wins</th></tr></thead><tbody>' +
+        lb.top.map(x => '<tr class="' + (x.me ? 'me' : '') + '"><td class="n">' + x.rank + '</td><td>' + avatarCell(x.avatar, x.name) + esc(x.name) + '</td><td class="n">' + x.level + '</td><td class="n">' + nf(x.xp) + '</td><td class="n">' + x.wins + '</td></tr>').join('') + '</tbody></table>';
+    } catch (e) { body.innerHTML = '<div class="msg" style="color:#ff8a8a">' + esc(e.message) + '</div>'; }
+  }
+}
+function championshipInit() {
+  $('#chClose').addEventListener('click', closeChampionship);
+  document.querySelectorAll('[data-ctab]').forEach(b => b.addEventListener('click', () => { chTab = b.dataset.ctab; setChMsg(''); renderChampionship(); }));
+  $('#champBtn').addEventListener('click', () => openChampionship('overview'));
+  $('#luChamp').addEventListener('click', () => { $('#levelUp').hidden = true; luQueue.length = 0; $('#results').hidden = true; quitToMenu(); openChampionship('overview'); });
+}
+/* ---------- online Championship races (Stage 7): see server/index.js ---------- */
+// race server address: set window.LOGP_RACE_SERVER for a hosted server; on this PC / Wi-Fi the game uses port 8787 of the same host
+// race server address: hosted builds set window.LOGP_RACE_SERVER (phone app) or serve the game from the race server itself (same address);
+// the local test servers on ports 5180/5181 talk to the race server on port 8787
+const RACE_SERVER = window.LOGP_RACE_SERVER || (/^https?:$/.test(location.protocol) && location.hostname
+  ? (location.protocol === 'https:' ? 'wss://' : 'ws://') + (/^518[01]$/.test(location.port) ? location.hostname + ':8787' : location.host) : null);
+const mp = { ws: null, status: 'idle', welcome: null, lobby: null, race: null, offset: 0, frozen: false, result: null, sendT: 0, pingT: 0, lostAt: 0, retry: 0, want: false, error: '' };
+const mpNow = () => Date.now() + mp.offset;
+function mpSend(m) { if (mp.ws && mp.ws.readyState === 1) mp.ws.send(JSON.stringify(m)); }
+async function mpConnect() {
+  if (!RACE_SERVER) { mp.status = 'none'; renderMpBox(); return; }
+  if (mp.ws && mp.ws.readyState <= 1) return;
+  if (!$('#rooms').hidden) setTimeout(renderRooms, 0);
+  const cloud = window.LOGP_CLOUD, token = cloud && await cloud.accessToken();
+  if (!token) { mp.status = 'signedout'; renderMpBox(); return; }
+  mp.status = 'connecting'; mp.error = ''; renderMpBox();
+  let ws; try { ws = new WebSocket(RACE_SERVER); } catch (e) { mp.status = 'offline'; renderMpBox(); return; }
+  mp.ws = ws;
+  ws.onopen = () => { mpSend({ t: 'hello', token, v: 1 }); mpPing(); };
+  ws.onmessage = ev => { let m; try { m = JSON.parse(ev.data); } catch (e) { return; } mpOnMessage(m); };
+  ws.onclose = () => {
+    if (mp.ws !== ws) return;
+    mp.ws = null;
+    if (mp.race && !mp.race.done) { // during a race: freeze the car and try to come back within 30 s
+      if (!mp.lostAt) mp.lostAt = Date.now();
+      mp.frozen = true; mpBanner();
+      if (Date.now() - mp.lostAt < 30000) setTimeout(mpConnect, 1500);
+      return;
+    }
+    mp.status = mp.status === 'connecting' ? 'offline' : 'closed'; mp.lobby = null; mp.room = null; renderMpBox(); renderRooms();
+  };
+}
+function mpPing() { clearInterval(mp.pingT); mp.pingT = setInterval(() => mpSend({ t: 'ping', c: Date.now() }), 2000); mpSend({ t: 'ping', c: Date.now() }); }
+function mpOnMessage(m) {
+  if (m.t === 'pong') { const rtt = Date.now() - m.c; mp.offset = m.s + rtt / 2 - Date.now(); return; }
+  if (m.t === 'welcome') {
+    mp.welcome = m; mp.status = 'ready';
+    if (mp.lostAt && !(mp.race && !mp.race.done)) mp.lostAt = 0;
+    if (mp.want && m.eligible && !mp.race) mpSend({ t: 'queue' });
+    renderMpBox(); renderRooms(); return;
+  }
+  if (m.t === 'lobby') { mp.lobby = m; mp.lobby.at = Date.now(); mp.status = 'lobby'; renderMpBox(); return; }
+  if (m.t === 'start') { mpStart(m); return; }
+  if (m.t === 'p') { mpSnapshot(m); return; }
+  if (m.t === 'result') { mpResult(m); return; }
+  if (m.t === 'dsq') { if (player) { radio('Disqualified by the race server: ' + m.why + '.'); showToast('DSQ', 't-pen', 3, m.why); } return; }
+  if (m.t === 'room') { mp.room = m.code ? m : null; if (m.code) setRmMsg(''); renderRooms(); return; }
+  if (m.t === 'quali-result') { mpQualiResult(m); return; }
+  if (m.t === 'error') { if (m.code === 'room') { setRmMsg(m.msg, 'err'); renderRooms(); return; } mp.error = m.msg; if (m.code === 'replaced') mp.status = 'closed'; renderMpBox(); }
+}
+function mpFindRace() { mp.want = true; if (mp.ws && mp.ws.readyState === 1 && mp.welcome) mpSend({ t: 'queue' }); else mpConnect(); }
+function mpCancel() { mp.want = false; mpSend({ t: 'leave' }); mp.lobby = null; mp.status = 'ready'; renderMpBox(); }
+function mpBanner() {
+  const b = $('#mpBanner'); if (!b) return;
+  if (!mp.frozen) { b.hidden = true; return; }
+  const left = Math.max(0, 30 - Math.floor((Date.now() - mp.lostAt) / 1000));
+  b.hidden = false; b.textContent = left > 0 ? 'Connection lost · your car is stopped · reconnecting (' + left + ' s)' : 'Could not reconnect · you will be classified DNF';
+  if (left > 0 && mp.frozen) setTimeout(mpBanner, 500);
+}
+// the server's start message: build the grid (you, ghost players, labelled AI fill) and sync the start lights to its clock
+function mpStart(m) {
+  if (m.rejoin && mp.race && mp.race.id === m.raceId) { mp.frozen = false; mp.lostAt = 0; mpBanner(); radio('Reconnected. Go, go!'); return; }
+  mp.want = false; mp.lobby = null; mp.result = null; mp.status = 'racing';
+  mp.race = { id: m.raceId, you: m.you, startAt: m.startAt, endsAt: m.endsAt, kind: m.kind || 'champ', room: m.room, done: false, test: m.test, remote: new Map() };
+  if (mp.offset === 0 && m.serverNow) mp.offset = m.serverNow - Date.now();
+  ['#menu', '#qrSetup', '#results', '#pause', '#hub', '#champ', '#garage', '#sheet', '#progress', '#rooms', '#levelUp'].forEach(id => { const el = $(id); if (el) el.hidden = true; });
+  initAudio(); mode = 'mp'; session = 'race'; rec = null; recenterTilt(); sc = null; vsc = null; yellow = null; greenUntil = 0;
+  hideTT(); document.body.classList.remove('no-pits');
+  loadTrack(trackById(m.track)); LAPS = m.laps; setupWeather('dry');
+  cars = []; player = null;
+  const grid = m.grid.slice().sort((a, b) => a.slot - b.slot);
+  grid.forEach((g, slot) => {
+    const t = teamById(g.team);
+    if (g.key === m.you) { player = makeCar(Object.assign(playerDef(), { team: t.name, teamId: t.id, color: t.color, alt: t.alt }), slot, 1, true); applyGarage(player); cars.push(player); }
+    else {
+      const initials = (g.name || 'P').split(/\s+/).map(w => w[0]).join('').slice(0, 3).toUpperCase();
+      const c = makeCar({ code: initials, name: g.name, team: t.name, teamId: t.id, color: t.color, alt: t.alt }, slot, 1, false);
+      c.remote = true; c.ai = false; c.key = g.key; c.snap = null; mp.race.remote.set(g.key, c); cars.push(c);
+    }
+  });
+  // AI fill: computer cars only in your own game, behind the players, never scored
+  const pool = RIVALS.filter(r => r.teamId !== myTeamId()).slice(0, m.ai);
+  pool.forEach((r, i) => { const c = makeCar(Object.assign({}, r, { name: r.name + ' (AI)' }), grid.length + i, rivalSkill(r) * 0.97, false); c.aiFill = true; cars.push(c); });
+  for (const c of cars) { c.tyre = 'M'; c.stints = ['M']; c.nextTyre = 'H'; c.stopAt = 1 + Math.floor(Math.random() * Math.max(1, LAPS - 1)); }
+  overallBest = Infinity; fastestCar = null; finishCount = 0; skidN = 0; parts.length = 0;
+  syncCarMeshes();
+  for (const c of cars) if (c.remote) c.mesh.g.traverse(o => { if (o.material) { o.material = o.material.clone(); o.material.transparent = true; o.material.opacity = 0.42; o.material.depthWrite = false; } });
+  $('#radio').hidden = true; refreshPitUI();
+  // lights: five red lights 0.9 s apart, then a short hold; lights out exactly at the server's start time
+  lightsHold = 0.6;
+  const toGo = (m.startAt - mpNow()) / 1000;
+  state = 'lights'; lightsT = 0.9 * 5 + lightsHold - toGo; litShown = -99;
+  setLights(0);
+  hud.hidden = false; buildRows(); snapCamera(player);
+  if (m.kind === 'quali') showToast('Qualifying', '', 2.6, Math.round((m.endsAt - m.startAt) / 1000) + ' s · your best lap sets your grid slot');
+  else showToast(m.kind === 'room' ? 'Room ' + m.room : m.test ? 'Test race' : 'Championship', '', 2.4, cars.length + ' cars · ' + (m.grid.length - 1) + ' rival player' + (m.grid.length === 2 ? '' : 's') + ' · ' + m.ai + ' AI');
+  clearInterval(mp.sendT); mp.sendT = setInterval(() => mpSendState(false), 100);
+}
+function mpSendState(force) {
+  if (mode !== 'mp' || !player || !mp.race || mp.race.done || mp.frozen) return;
+  if (state !== 'race' && state !== 'finished' && !force) return;
+  mpSend({ t: 's', f: +Math.max(0, player.total / N).toFixed(4), x: Math.round(player.x), y: Math.round(player.y), a: +player.a.toFixed(3), v: Math.round(player.vf || 0), pit: !!player.pit, pen: player.penalty || 0 });
+}
+function mpSnapshot(m) {
+  if (!mp.race) return;
+  for (const s of m.cars) {
+    const c = mp.race.remote.get(s.k); if (!c) continue;
+    c.snap = s; c.offline = !s.on; c.finished = s.fin; c.penalty = s.pen || 0; c.qbest = s.b != null ? s.b / 1000 : null;
+    if (s.dnf && !c.dnf) { c.dnf = true; c.dnfWhy = 'Out'; }
+  }
+}
+// ghost cars glide towards the server's latest position for that player
+function mpMoveRemote(c, dt) {
+  const s = c.snap; if (!s) return;
+  const k = Math.min(1, dt * 8);
+  if (!c.inited || Math.hypot(s.x - c.x, s.y - c.y) > 600) { c.x = s.x; c.y = s.y; c.a = s.a; c.inited = true; }
+  else { c.x += (s.x - c.x) * k; c.y += (s.y - c.y) * k; c.a = wrapA(c.a + wrapA(s.a - c.a) * k); }
+  c.vf = s.v; c.vx = Math.cos(c.a) * s.v; c.vy = Math.sin(c.a) * s.v; c.pit = s.pit ? c.pit || {} : null;
+  c.total = s.f * N; c.lapIdx = Math.floor(s.f); c.idx = at(Math.round(c.total));
+}
+// qualifying session over: show the grid, the race starts a few seconds later
+function mpQualiResult(m) {
+  if (!mp.race) return;
+  mp.race.done = true; clearInterval(mp.sendT);
+  const me = m.grid.find(g => g.key === mp.race.you);
+  state = 'finished'; if (player) { player.ai = true; player.skill = 0.7; player.vmax = VMAX * 0.6; }
+  showToast(me ? 'P' + me.pos : 'Grid', 't-green', 4, me && me.best ? 'Qualifying · your best ' + fmt(me.best / 1000) : 'Qualifying · no lap time set');
+  radio('Grid: ' + m.grid.slice(0, 5).map(g => g.pos + '. ' + g.name + (g.best ? ' ' + fmt(g.best / 1000) : ' no time')).join(' · ') + (m.grid.length > 5 ? ' …' : ''));
+}
+function mpResult(m) {
+  if (!mp.race || m.raceId !== mp.race.id) return;
+  mp.race.done = true; mp.result = m; mp.frozen = false; mpBanner();
+  clearInterval(mp.sendT);
+  if (state === 'race') { // the race ended before you finished (time limit / you were out)
+    state = 'finished'; player.ai = true; player.skill = 0.75; player.vmax = VMAX * 0.75;
+  }
+  const me = m.results.find(r => r.key === mp.race.you);
+  if (me) radio(me.pos ? 'Official result: P' + me.pos + (me.points ? ' · ' + me.points + ' points' : '') + (me.gold ? ' · +' + me.gold + ' gold' : '') : 'You were not classified: ' + (me.why || 'DNF') + '.');
+  setTimeout(() => { $('#results').hidden = false; renderResults(); }, state === 'finished' ? 400 : 0);
+  if (window.LOGP_CLOUD) window.LOGP_CLOUD.refreshProfile();
+}
+function renderMpResults() {
+  const m = mp.result, test = mp.race && mp.race.test, roomRace = mp.race && mp.race.kind === 'room';
+  $('#resEyebrow').textContent = (roomRace ? 'Room ' + mp.race.room + ' · ' : test ? 'Test race · ' : 'Championship · ') + TRACK.name;
+  $('#againBtn').textContent = roomRace ? 'Back to the room' : 'Back to Championship'; $('#setupBtn').hidden = true;
+  $('#replayBtn').hidden = !rec || rec.frames.length < 20;
+  $('#resXp').hidden = true;
+  if (!m) { $('#resTitle').textContent = 'Finished'; $('#resSub').textContent = 'Waiting for the other drivers and the official classification…'; $('#resHead').innerHTML = ''; $('#resBody').innerHTML = ''; return; }
+  const me = m.results.find(r => r.key === mp.race.you), lead = m.results.find(r => r.pos === 1);
+  $('#resTitle').textContent = !me || !me.pos ? 'DNF' : me.pos === 1 ? 'Victory' : me.pos <= 3 ? 'Podium' : 'Finished P' + me.pos;
+  $('#resSub').textContent = (roomRace ? 'Room race with friends: not part of the Championship.' : test ? 'Test race: results go to a hidden test season, no points or gold count.' : 'Official result from the race server.') + (me && me.points ? ' ' + me.points + ' points.' : '') + (me && me.gold ? ' +' + nf(me.gold) + ' gold.' : '');
+  $('#resHead').innerHTML = '<th>Pos</th><th>Driver</th><th>Team</th><th>Time</th><th>Best lap</th><th>Pts</th>';
+  const rows = m.results.map(r => '<tr class="' + (r.key === mp.race.you ? 'me' : '') + '"><td class="p">' + (r.pos || '—') + '</td><td><span class="chip" style="background:' + teamById(r.team).color + '"></span>' + esc(r.name) + '</td><td>' + esc(teamById(r.team).name) + '</td><td class="num">' +
+    (r.dnf ? 'DNF · ' + esc(r.why) : r.timeMs != null ? (r.pos === 1 ? fmt(r.timeMs / 1000) : '+' + ((r.timeMs - lead.timeMs) / 1000).toFixed(3)) : r.laps + ' laps') + '</td><td class="num' + (r.fastest ? ' t-purple' : '') + '">' + fmt(r.best != null ? r.best / 1000 : null) + '</td><td class="num">' + (r.points || 0) + '</td></tr>');
+  const ai = cars.filter(c => c.aiFill).map(c => '<tr style="opacity:.55"><td class="p">AI</td><td><span class="chip" style="background:' + c.color + '"></span>' + esc(c.name) + '</td><td>' + esc(c.team) + '</td><td class="num">not scored</td><td class="num">' + fmt(c.best) + '</td><td class="num">—</td></tr>');
+  $('#resBody').innerHTML = rows.join('') + ai.join('');
+}
+function mpLeaveRace() {
+  clearInterval(mp.sendT); mp.frozen = false; mpBanner();
+  if (mp.race && !mp.race.done) { mp.race.done = true; if (mp.ws) mp.ws.close(); }
+  const wasRoom = mp.race && mp.race.kind !== 'champ';
+  mp.race = null; mp.result = null; mp.status = mp.ws ? 'ready' : 'idle';
+  mode = 'quick'; backToMenu();
+  if (wasRoom && mp.room) openRooms(); else openChampionship('overview');
+}
+// the live-race panel on the Championship overview
+/* ---------- private rooms (Multiplayer) ---------- */
+let rmForm = { track: null, laps: 3, ai: 4 };
+function openRooms() {
+  ['#menu', '#champ'].forEach(id => { $(id).hidden = true; });
+  $('#rooms').hidden = false; $('#rooms').scrollTop = 0;
+  const cloud = window.LOGP_CLOUD;
+  if (!cloud || cloud.state.status !== 'signed-in') { setRmMsg('Sign in with Google on the main menu to race with friends.', 'err'); $('#rmBody').innerHTML = ''; return; }
+  if (!mp.ws || mp.ws.readyState > 1) mpConnect(); else renderRooms();
+}
+function closeRooms() { $('#rooms').hidden = true; $('#menu').hidden = false; refreshMenu(); }
+function setRmMsg(t, cls) { const m = $('#rmMsg'); if (m) { m.textContent = t || ''; m.className = 'gar-msg' + (cls ? ' ' + cls : ''); } }
+function renderRooms() {
+  if ($('#rooms').hidden) return;
+  const body = $('#rmBody'), room = mp.room;
+  if (mp.status === 'none') { body.innerHTML = '<p class="sub">Multiplayer needs the race server, which is not set up for this version of the game yet.</p>'; return; }
+  if (mp.status === 'connecting' || !mp.welcome) {
+    body.innerHTML = mp.status === 'offline' || mp.status === 'closed' ? '<p class="sub">The race server is not reachable right now.</p><button class="gbtn" type="button" id="rmRetry">Try again</button>'
+      : '<p class="sub"><span class="spin" style="display:inline-block;vertical-align:middle;margin-right:8px"></span>Connecting to the race server…</p>';
+    const b = $('#rmRetry'); if (b) b.onclick = mpConnect; return;
+  }
+  const openTracks = TRACKS.filter(t => trackOpen(t.id));
+  if (!rmForm.track || !trackOpen(rmForm.track)) rmForm.track = quickTrack();
+  if (!room) {
+    $('#rmTitle').textContent = 'Race your friends';
+    body.innerHTML = '<div class="ch-grid"><div class="ch-box"><h3>Create a room</h3>' +
+      '<span class="lbl">Circuit</span><div class="rm-tracks">' + openTracks.map(t => '<button type="button" data-rt="' + t.id + '" aria-pressed="' + (t.id === rmForm.track) + '">' + esc(t.name) + '</button>').join('') + '</div>' +
+      '<span class="lbl">Race distance</span><div class="rm-tracks">' + [3, 5, 8].map(n => '<button type="button" data-rl="' + n + '" aria-pressed="' + (n === rmForm.laps) + '">' + n + ' laps</button>').join('') + '</div>' +
+      '<span class="lbl">AI cars to fill the grid</span><div class="rm-ai"><input type="range" min="0" max="13" value="' + rmForm.ai + '" id="rmAi" aria-label="AI cars"><b id="rmAiV">' + rmForm.ai + '</b></div>' +
+      '<button class="go" type="button" id="rmCreate">Create room</button></div>' +
+      '<div class="ch-box"><h3>Join a room</h3><span>Type the 6-character code your friend shared.</span>' +
+      '<div class="rm-join"><input id="rmCode" maxlength="6" autocomplete="off" spellcheck="false" placeholder="ABC123" aria-label="Room code"><button class="go" type="button" id="rmJoin">Join</button></div></div></div>';
+    body.querySelectorAll('[data-rt]').forEach(b => b.onclick = () => { rmForm.track = b.dataset.rt; renderRooms(); });
+    body.querySelectorAll('[data-rl]').forEach(b => b.onclick = () => { rmForm.laps = +b.dataset.rl; renderRooms(); });
+    $('#rmAi').oninput = e => { rmForm.ai = +e.target.value; $('#rmAiV').textContent = rmForm.ai; };
+    $('#rmCreate').onclick = () => { setRmMsg('Creating your room…'); mpSend({ t: 'room-create', track: rmForm.track, laps: rmForm.laps, ai: rmForm.ai }); };
+    const join = () => { const c = $('#rmCode').value.trim().toUpperCase(); if (c.length !== 6) { setRmMsg('A room code has 6 characters.', 'err'); return; } setRmMsg('Joining ' + c + '…'); mpSend({ t: 'room-join', code: c }); };
+    $('#rmJoin').onclick = join; $('#rmCode').onkeydown = e => { if (e.key === 'Enter') join(); };
+    return;
+  }
+  const host = room.host === room.you, n = room.players.length, aiMax = Math.max(0, room.max - n);
+  $('#rmTitle').textContent = 'Room ' + room.code;
+  body.innerHTML = '<div class="ch-grid"><div class="ch-box"><h3>Room code</h3><div class="rm-code-row"><span class="rm-code">' + esc(room.code) + '</span><button class="gbtn alt" type="button" id="rmCopy">Copy code</button></div>' +
+    '<span>Share this code. Friends open Multiplayer → Join a room. ' + n + ' of ' + room.max + ' drivers.</span>' +
+    '<ul class="mp-list">' + room.players.map(p => '<li>' + teamEmblem(teamById(p.team), 22) + esc(p.name) + (p.key === room.you ? ' (you)' : '') + (p.host ? '<span class="rm-host">HOST</span>' : '') + '</li>').join('') + '</ul></div>' +
+    '<div class="ch-box"><h3>Race settings</h3>' +
+    (host ? '<span class="lbl">Circuit</span><div class="rm-tracks">' + openTracks.map(t => '<button type="button" data-st="' + t.id + '" aria-pressed="' + (t.id === room.track) + '">' + esc(t.name) + '</button>').join('') + '</div>' +
+      '<span class="lbl">Race distance</span><div class="rm-tracks">' + [3, 5, 8].map(x => '<button type="button" data-sl="' + x + '" aria-pressed="' + (x === room.laps) + '">' + x + ' laps</button>').join('') + '</div>' +
+      '<span class="lbl">AI cars</span><div class="rm-ai"><input type="range" min="0" max="' + aiMax + '" value="' + Math.min(room.ai, aiMax) + '" id="rmAi2" aria-label="AI cars"><b id="rmAi2V">' + Math.min(room.ai, aiMax) + '</b></div>'
+      : '<span>' + esc(room.trackName || room.track) + ' · ' + room.laps + ' laps · ' + Math.min(room.ai, aiMax) + ' AI cars</span><span>The host chooses the settings and starts the session.</span>') +
+    '<span>First a ' + Math.round(room.qualiS / 60 * 10) / 10 + '-minute qualifying session (best lap counts, fastest starts on pole), then the race. Other drivers are ghost cars: no contact.</span>' +
+    (room.state !== 'waiting' ? '<span class="mp-test">SESSION IN PROGRESS</span>' : '') +
+    '<div class="row" style="display:flex;gap:8px;flex-wrap:wrap">' + (host ? '<button class="go" type="button" id="rmStart"' + (room.state !== 'waiting' ? ' disabled' : '') + '>Start qualifying</button>' : '') +
+    '<button class="gbtn alt" type="button" id="rmLeave">Leave room</button></div></div></div>';
+  $('#rmCopy').onclick = () => { try { navigator.clipboard.writeText(room.code).then(() => setRmMsg('Code copied: ' + room.code, 'ok'), () => setRmMsg('Copy the code: ' + room.code)); } catch (e) { setRmMsg('Copy the code: ' + room.code); } };
+  $('#rmLeave').onclick = () => { mpSend({ t: 'room-leave' }); mp.room = null; setRmMsg(''); renderRooms(); };
+  if (host) {
+    body.querySelectorAll('[data-st]').forEach(b => b.onclick = () => mpSend({ t: 'room-set', track: b.dataset.st }));
+    body.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => mpSend({ t: 'room-set', laps: +b.dataset.sl }));
+    $('#rmAi2').oninput = e => { $('#rmAi2V').textContent = e.target.value; };
+    $('#rmAi2').onchange = e => mpSend({ t: 'room-set', ai: +e.target.value });
+    const sb = $('#rmStart'); if (sb) sb.onclick = () => { sb.disabled = true; setRmMsg('Starting the qualifying session…'); mpSend({ t: 'room-start' }); };
+  }
+}
+function renderMpBox() {
+  const el = $('#mpBox'); if (!el) return;
+  const w = mp.welcome, test = w && w.test;
+  let html = '<h3>Live race</h3>' + (test ? '<span class="mp-test">TEST MODE · results go to a hidden test season · 1 player is enough</span>' : '');
+  if (mp.status === 'none') html += '<span>Live races need the race server, which is not set up for this version of the game yet.</span>';
+  else if (mp.status === 'signedout') html += '<span>Sign in to race online.</span>';
+  else if (mp.status === 'idle' || mp.status === 'closed') html += '<span>Connect to the race server to look for a race.</span><div class="row"><button class="gbtn" type="button" data-mp="connect">Connect</button></div>';
+  else if (mp.status === 'connecting') html += '<span><span class="spin" style="display:inline-block;vertical-align:middle;margin-right:8px"></span>Connecting to the race server…</span>';
+  else if (mp.status === 'offline') html += '<span>The race server is not reachable right now.</span><div class="row"><button class="gbtn" type="button" data-mp="connect">Try again</button></div>';
+  else if (mp.status === 'lobby' && mp.lobby) {
+    const l = mp.lobby, left = l.startsIn == null ? null : Math.max(0, Math.ceil((l.startsIn - (Date.now() - l.at)) / 1000));
+    html += '<div class="row"><span class="mp-count">' + (left == null ? l.players.length + '/' + l.max : left + ' s') + '</span><span>' + (left == null ? 'Waiting for ' + (l.min - l.players.length) + ' more driver' + (l.min - l.players.length === 1 ? '' : 's') + '…' : 'Race starts soon · ' + l.players.length + ' of ' + l.max + ' drivers, AI fills the rest') + '</span></div>' +
+      '<ul class="mp-list">' + l.players.map(p => '<li>' + teamEmblem(teamById(p.team), 22) + esc(p.name) + '</li>').join('') + '</ul><div class="row"><button class="gbtn alt" type="button" data-mp="cancel">Leave lobby</button></div>';
+    if (left != null) setTimeout(() => { if (mp.status === 'lobby') renderMpBox(); }, 500);
+  } else if (w) {
+    const r = w.round;
+    html += r ? '<span>' + (test ? 'Test round' : 'Round ' + r.round) + ' · ' + esc(r.trackName || r.track) + ' · ' + r.laps + ' laps · ghost cars (no contact between players)</span>' : '';
+    html += w.eligible ? '<div class="row"><button class="go" type="button" data-mp="find">Find race</button></div>' : '<span>' + esc(w.reason) + '</span>';
+  }
+  if (mp.error) html += '<span style="color:#ff8a8a">' + esc(mp.error) + '</span>';
+  el.innerHTML = html;
+  el.querySelectorAll('[data-mp]').forEach(b => b.onclick = () => { const a = b.dataset.mp; if (a === 'connect') mpConnect(); else if (a === 'find') mpFindRace(); else if (a === 'cancel') mpCancel(); });
+}
+/* ---------- interactive tutorial: a solo practice drive on Vespera, one checked step at a time ---------- */
+const TUT_KEY = 'logp-tutorial-done';
+const isTouchUi = () => document.body.classList.contains('is-touch');
+const keyHint = (desk, touch) => isTouchUi() ? touch : desk;
+let tut = null;
+const TUT_STEPS = [
+  { title: 'Accelerate', text: 'Hold the throttle and get up to 150 km/h. The rev lights on the dash turn green as the engine winds up.',
+    keys: () => keyHint('<kbd>↑</kbd> or <kbd>W</kbd> throttle', '<kbd>GAS</kbd> button, bottom right'), check: t => gearInfo(player).kmh >= 150, progress: () => gearInfo(player).kmh / 150 },
+  { title: 'Brake', text: 'Brake hard and slow down below 60 km/h. Braking early for corners is faster than braking late and running wide.',
+    keys: () => keyHint('<kbd>↓</kbd> or <kbd>S</kbd> brake', '<kbd>BRK</kbd> button'), check: t => t.wasFast && gearInfo(player).kmh < 60, tick: t => { if (gearInfo(player).kmh > 100) t.wasFast = true; } },
+  { title: 'Steer', text: 'Steer through the next corners and stay on the track. Grass and gravel slow you down; going too wide also counts against track limits.',
+    keys: () => keyHint('<kbd>←</kbd> <kbd>→</kbd> or <kbd>A</kbd> <kbd>D</kbd> steer', '<kbd>◀</kbd> <kbd>▶</kbd> buttons, or tilt the phone (settings)'), start: t => { t.from = player.total; }, check: t => player.total - t.from > 900, progress: t => (player.total - t.from) / 900 },
+  { title: 'Slide (drift)', text: 'Turn in hard at speed so the rear steps out, then ease off the throttle to catch the slide. Skid marks show when the tyres let go. Sliding wears your tyres faster.',
+    keys: () => keyHint('Full throttle + hard <kbd>←</kbd>/<kbd>→</kbd>', 'GAS + hold ◀ or ▶'), check: t => Math.abs(player.vl || 0) > 60 && gearInfo(player).kmh > 90, skipAfter: 35 },
+  { title: 'ERS boost', text: 'Your hybrid battery gives extra power. Hold ERS on a straight for a burst of speed; it recharges when you brake. The ERS bar on the dash shows the charge.',
+    keys: () => keyHint('<kbd>Space</kbd> hold for ERS', '<kbd>ERS</kbd> button'), start: t => { t.boost = 0; }, tick: (t, dt) => { if (player.boosting) t.boost += dt; }, check: t => t.boost > 1.5, progress: t => t.boost / 1.5 },
+  { title: 'DRS', text: 'DRS opens the rear wing for top speed. In races it works in the green zones on the map when you are within 1 second of the car ahead. Here it is free: wait for a green zone and press DRS.',
+    keys: () => keyHint('<kbd>E</kbd> open DRS in a green zone', '<kbd>DRS</kbd> button'), check: () => player.drs, skipAfter: 60 },
+  { title: 'Complete a lap', text: 'Finish the lap by crossing the start line. Every lap is timed; your best lap shows on the dash. Pit stops: press B (or BOX THIS LAP) to change tyres next time you pass the pits.',
+    keys: () => keyHint('<kbd>B</kbd> box this lap · <kbd>1</kbd>–<kbd>5</kbd> pick tyres', '<kbd>BOX THIS LAP</kbd> button'), check: () => player.lapIdx >= 1, progress: () => clamp((player.total + 0) / N, 0, 1) },
+  { title: 'How to win', text: 'Races start when the five red lights go out. Finish first to win, but watch out: penalties add time (track limits, overtaking under a safety car, using only one dry tyre). Use tyres wisely and pit when they wear out.', info: true },
+  { title: 'XP and gold', text: 'Every race earns XP and gold. Winning, podiums, a clean race and the fastest lap earn more. Gold buys cars and upgrades in the Garage. Win often and your rivals get faster too (challenge tier), with bigger rewards.', info: true },
+  { title: 'Levels and unlocks', text: 'Each level has 3 tasks, such as finishing in the top 3 at a track. Finish all 3 to level up and unlock new tracks, cars, teams, upgrades, and at level 50 the online Championship. Multiplayer lets you race friends with a room code.', info: true },
+];
+function startTutorial() {
+  initAudio(); mode = 'tutorial'; session = 'quali'; qualiTimes = null; rec = null; recenterTilt(); sc = null; vsc = null; yellow = null; greenUntil = 0;
+  hideTT(); document.body.classList.remove('no-pits');
+  loadTrack(trackById('vespera')); LAPS = 99; setupWeather('dry');
+  cars = []; player = makeCar(playerDef(), 0, 1, true); applyGarage(player); cars.push(player);
+  player.tyre = 'M'; player.stints = ['M']; player.nextTyre = 'H';
+  overallBest = Infinity; fastestCar = null; finishCount = 0; skidN = 0; parts.length = 0;
+  syncCarMeshes();
+  state = 'race'; raceT0 = simT; player.lapStart = simT; player.reactAt = 0;
+  ['#menu', '#qrSetup', '#results', '#pause', '#hub', '#champ', '#rooms', '#garage', '#sheet', '#progress'].forEach(id => { const el = $(id); if (el) el.hidden = true; });
+  lightsEl.classList.add('gone'); $('#radio').hidden = true;
+  hud.hidden = false; buildRows(1); snapCamera(player); refreshPitUI();
+  tut = { i: -1, t0: 0 }; tutGo(0);
+  clearInterval(tutTimer); tutTimer = setInterval(tutTick, 100);
+}
+let tutTimer = 0;
+function tutGo(i) {
+  if (!tut) return;
+  tut.i = i; tut.t0 = performance.now(); tut.done = false;
+  const st = TUT_STEPS[i];
+  if (!st) return tutFinish();
+  if (st.start) st.start(tut);
+  $('#coach').hidden = false; $('#coach').classList.remove('done');
+  $('#coachStep').textContent = 'Step ' + (i + 1) + ' of ' + TUT_STEPS.length;
+  $('#coachTitle').textContent = st.title; $('#coachText').textContent = st.text;
+  $('#coachKeys').innerHTML = st.keys ? st.keys() : '';
+  $('#coachBar').style.width = st.info ? '100%' : '0%';
+  $('#coachNext').hidden = !st.info; $('#coachNext').textContent = i === TUT_STEPS.length - 1 ? 'Finish' : 'Next';
+  $('#coachSkip').hidden = !!st.info;
+  if (st.info) { player.ai = true; player.skill = 0.7; player.vmax = VMAX * 0.7; } // the car drives itself while you read
+  beep(740, 0.06);
+}
+function tutTick() {
+  if (!tut || mode !== 'tutorial' || state.startsWith('paused')) return;
+  const st = TUT_STEPS[tut.i]; if (!st || st.info || tut.done) return;
+  if (st.tick) st.tick(tut, 0.1);
+  if (st.progress) $('#coachBar').style.width = (clamp(st.progress(tut), 0, 1) * 100).toFixed(0) + '%';
+  if (st.skipAfter && (performance.now() - tut.t0) / 1000 > st.skipAfter) $('#coachSkip').textContent = 'Skip (hard to find)';
+  if (st.check(tut)) {
+    tut.done = true; $('#coachBar').style.width = '100%'; $('#coach').classList.add('done');
+    $('#coachTitle').textContent = '✓ ' + st.title; beep(1180, 0.08); buzz('light');
+    setTimeout(() => { if (tut && TUT_STEPS[tut.i] === st) tutGo(tut.i + 1); }, 1100);
+  }
+}
+function tutFinish() {
+  store.set(TUT_KEY, true);
+  showToast('Tutorial complete', 't-green', 2.6, 'Pick Quick Race to start earning XP');
+  tutExit();
+}
+function tutExit() {
+  clearInterval(tutTimer); tut = null; $('#coach').hidden = true;
+  mode = 'quick'; quitToMenu();
+}
+function tutorialInit() {
+  $('#coachSkip').addEventListener('click', () => { if (tut) { $('#coachSkip').textContent = 'Skip step'; tutGo(tut.i + 1); } });
+  $('#coachNext').addEventListener('click', () => { if (tut) tutGo(tut.i + 1); });
+  $('#coachExit').addEventListener('click', tutExit);
+}
+function closeProgress() { $('#progress').hidden = true; $('#menu').hidden = false; }
 function boot() {
+  $('#progClose').addEventListener('click', closeProgress);
+  garageInit();
+  championshipInit();
+  tutorialInit();
+  $('#roomsBtn').addEventListener('click', openRooms);
+  $('#rmClose').addEventListener('click', closeRooms);
+  $('#sheetClose').addEventListener('click', closeSheet);
+  $('#luOk').addEventListener('click', showNextLevelUp);
+  initProfile();
   loadTrack(trackById(settings.track)); resize(); refreshMenu(); setMuted(muted); applySteerSetting(false);
   $('#touch').hidden = true;
   const showTouch = () => { $('#touch').hidden = !(isTouch && !hud.hidden); };
